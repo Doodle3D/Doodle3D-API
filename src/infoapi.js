@@ -1,4 +1,4 @@
-import rest from 'src/restapi';
+import rest from 'rest-API';
 
 export default class {
 	constructor (localIP) {

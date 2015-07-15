@@ -1,11 +1,11 @@
-import rest from 'src/restapi';
-import ConfigAPI from 'src/configapi';
-import InfoAPI from 'src/infoapi';
-import NetworkAPI from 'src/networkapi';
-import PrinterAPI from 'src/printerapi';
-import SketchAPI from 'src/sketchapi';
-import SystemAPI from 'src/systemapi';
-import UpdateAPI from 'src/updateapi';
+import rest from 'rest-API';
+import ConfigAPI from 'config-API';
+import InfoAPI from 'info-API';
+import NetworkAPI from 'network-API';
+import PrinterAPI from 'printer-API';
+import SketchAPI from 'sketch-API';
+import SystemAPI from 'system-API';
+import UpdateAPI from 'update-API';
 
 export default class {
 	constructor (localIP) {

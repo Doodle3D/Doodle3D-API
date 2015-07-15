@@ -1,7 +1,9 @@
 {
   "jspm": {
-    "main": "src/doodle3dapi.js",
-    "directories": {},
+    "main": "doodle3dapi.js",
+    "directories": {
+      "lib": "src"
+    },
     "dependencies": {
       "jquery": "github:components/jquery@^2.1.4"
     },
@@ -10,16 +12,5 @@
       "babel-runtime": "npm:babel-runtime@^5.1.13",
       "core-js": "npm:core-js@^0.9.4"
     }
-  },
-  "name": "Doodle3D-API",
-  "version": "0.0.0",
-  "main": "",
-  "directories": {
-    "test": "test"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Doodle3D",
-  "license": "ISC"
+  }
 }

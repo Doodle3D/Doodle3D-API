@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import Doodle3DAPI from '../src/doodle3dapi';
-import rest from '../src/restapi';
+import Doodle3DAPI from 'doodle3d-API';
+import rest from 'rest-API';
 
 var api = "http://connect.doodle3d.com/api/";
 

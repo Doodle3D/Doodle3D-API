@@ -15,6 +15,15 @@ System.config({
 
 System.config({
   "map": {
+    "config-API": "src/configapi", 
+    "doodle3d-API": "src/doodle3dapi", 
+    "info-API": "src/infoapi", 
+    "network-API": "src/networkapi", 
+    "printer-API": "src/printerapi", 
+    "rest-API": "src/restapi", 
+    "sketch-API": "src/sketchapi", 
+    "system-API": "src/systemapi", 
+    "update-API": "src/updateapi", 
     "babel": "npm:babel-core@5.6.20",
     "babel-runtime": "npm:babel-runtime@5.6.20",
     "core-js": "npm:core-js@0.9.18",
