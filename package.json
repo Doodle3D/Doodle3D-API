@@ -1,5 +1,6 @@
 {
   "jspm": {
+    "format": "es6",
     "main": "doodle3dapi.js",
     "directories": {
       "lib": "src"
