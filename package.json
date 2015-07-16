@@ -12,6 +12,16 @@
       "babel": "npm:babel-core@^5.1.13",
       "babel-runtime": "npm:babel-runtime@^5.1.13",
       "core-js": "npm:core-js@^0.9.4"
+    }, 
+    "map": {
+      "config-API": "src/configapi", 
+      "info-API": "src/infoapi", 
+      "network-API": "src/networkapi", 
+      "printer-API": "src/printerapi", 
+      "rest-API": "src/restapi", 
+      "sketch-API": "src/sketchapi", 
+      "system-API": "src/systemapi", 
+      "update-API": "src/updateapi"
     }
   }
 }

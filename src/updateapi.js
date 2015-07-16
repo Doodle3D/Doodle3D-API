@@ -8,7 +8,7 @@ export default class {
 
 	status (callback) {
 		rest.get(this.api + 'update/status', callback);
-		
+
 		return this;
 	}
 
@@ -16,7 +16,7 @@ export default class {
 		//not tested
 
 		rest.post(this.api + 'update/download', {}, callback);
-		
+
 		return this;
 	}
 
@@ -24,7 +24,7 @@ export default class {
 		//not tested
 
 		rest.post(this.api + 'update/install', {}, callback);
-		
+
 		return this;
 	}
 
@@ -32,7 +32,7 @@ export default class {
 		//not tested
 
 		rest.post(this.api + 'update/clear', {}, callback);
-		
+
 		return this;
 	}
 }
