@@ -8,31 +8,23 @@ export default class {
 
 	status (callback) {
 		rest.get(this.api + 'update/status', callback);
-
-		return this;
 	}
 
 	download (callback) {
 		//not tested
 
 		rest.post(this.api + 'update/download', {}, callback);
-
-		return this;
 	}
 
 	install (callback) {
 		//not tested
 
 		rest.post(this.api + 'update/install', {}, callback);
-
-		return this;
 	}
 
 	clear (callback) {
 		//not tested
 
 		rest.post(this.api + 'update/clear', {}, callback);
-
-		return this;
 	}
 }

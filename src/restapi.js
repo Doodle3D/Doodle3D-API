@@ -1,4 +1,5 @@
 import $ from 'jquery';
+//in future remove jquery and use framework specificly for ajax calls or write own ajax calls
 
 export default {
 	post (url, data, callback) {

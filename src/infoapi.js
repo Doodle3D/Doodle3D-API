@@ -8,14 +8,10 @@ export default class {
 
 	get (callback) {
 		rest.get(this.api + 'info', callback);
-
-		return this;
 	}
 
 	status (callback) {
 		rest.get(this.api + 'info/status', callback);
-
-		return this;
 	}
 
 	downloadLogFiles () {
@@ -24,7 +20,5 @@ export default class {
 
 	acces (callback) {
 		rest.get(this.api + 'info/access', callback);
-
-		return this;
 	}
 }

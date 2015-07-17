@@ -8,7 +8,5 @@ export default class {
 
 	versions (callback) {
 		rest.get(this.api + 'system/fwversions', callback);
-		
-		return this;
 	}
 }
