@@ -1,4 +1,4 @@
-import Doodle3DAPI from 'src/doodle3dapi.js';
+import Doodle3DAPI from 'src/index.js';
 import rest from 'src/restapi.js';
 
 var api = 'http://connect.doodle3d.com/api/';

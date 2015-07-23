@@ -1,6 +1,6 @@
 {
   "jspm": {
-    "main": "./doodle3dapi",
+    "main": "./index.js",
     "directories": {
       "lib": "src"
     },
