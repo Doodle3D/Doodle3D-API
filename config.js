@@ -1,5 +1,6 @@
 System.config({
   "baseURL": "/",
+  "defaultJSExtensions": true,
   "transpiler": "babel",
   "babelOptions": {
     "optional": [
@@ -7,31 +8,23 @@ System.config({
     ]
   },
   "paths": {
-    "*": "*.js",
-    "github:*": "jspm_packages/github/*.js",
-    "npm:*": "jspm_packages/npm/*.js"
+    "github:*": "jspm_packages/github/*",
+    "npm:*": "jspm_packages/npm/*"
   }
 });
 
 System.config({
   "map": {
-    "config-API": "src/configapi", 
-    "doodle3d-API": "src/doodle3dapi", 
-    "info-API": "src/infoapi", 
-    "network-API": "src/networkapi", 
-    "printer-API": "src/printerapi", 
-    "rest-API": "src/restapi", 
-    "sketch-API": "src/sketchapi", 
-    "system-API": "src/systemapi", 
-    "update-API": "src/updateapi", 
-    "babel": "npm:babel-core@5.6.20",
-    "babel-runtime": "npm:babel-runtime@5.6.20",
+    "babel": "npm:babel-core@5.7.4",
+    "babel-runtime": "npm:babel-runtime@5.7.0",
     "core-js": "npm:core-js@0.9.18",
     "jquery": "github:components/jquery@2.1.4",
+    "traceur": "github:jmcriffey/bower-traceur@0.0.90",
+    "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.90",
     "github:jspm/nodelibs-process@0.1.1": {
       "process": "npm:process@0.10.1"
     },
-    "npm:babel-runtime@5.6.20": {
+    "npm:babel-runtime@5.7.0": {
       "process": "github:jspm/nodelibs-process@0.1.1"
     },
     "npm:core-js@0.9.18": {

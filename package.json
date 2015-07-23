@@ -1,7 +1,6 @@
 {
   "jspm": {
-    "format": "es6",
-    "main": "doodle3dapi.js",
+    "main": "./doodle3dapi",
     "directories": {
       "lib": "src"
     },
@@ -11,17 +10,9 @@
     "devDependencies": {
       "babel": "npm:babel-core@^5.1.13",
       "babel-runtime": "npm:babel-runtime@^5.1.13",
-      "core-js": "npm:core-js@^0.9.4"
-    }, 
-    "map": {
-      "config-API": "src/configapi", 
-      "info-API": "src/infoapi", 
-      "network-API": "src/networkapi", 
-      "printer-API": "src/printerapi", 
-      "rest-API": "src/restapi", 
-      "sketch-API": "src/sketchapi", 
-      "system-API": "src/systemapi", 
-      "update-API": "src/updateapi"
+      "core-js": "npm:core-js@^0.9.4",
+      "traceur": "github:jmcriffey/bower-traceur@0.0.90",
+      "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.90"
     }
   }
 }
