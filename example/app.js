@@ -1,5 +1,5 @@
 import Doodle3DAPI from 'src/index.js';
-import rest from 'src/restapi.js';
+import * as rest from 'src/restapi.js';
 
 var api = 'http://connect.doodle3d.com/api/';
 
@@ -80,12 +80,7 @@ var addBox = (function () {
 })();
 
 function searchBoxes () {
-	rest.get(api + 'list.php', function (error, boxes) {
-		if (error) {
-			return;
-			console.warn(error);
-		}
-
+	rest.get(api + 'list.php').then((boxes) => {
 		for (var i = 0; i < boxes.length; i ++) {
 			var box = boxes[i];
 
@@ -96,12 +91,16 @@ function searchBoxes () {
 setInterval(searchBoxes, 5000);
 searchBoxes();
 
+/*
 addBox({
 	localip: '127.0.0.1:3000', 
 	wifiboxid: 'Node Server'
 });
 
+
 addBox({
 	localip: '192.168.5.1', 
 	wifiboxid: 'Wired Printer'
 });
+
+*/

@@ -1,46 +1,50 @@
-import $ from 'jquery';
-//in future remove jquery and use framework specificly for ajax calls or write own ajax calls
+import 'github/fetch';
 
-export default {
-	post (url, data, callback) {
-		$.ajax({
-			url: url, 
-			type: 'POST', 
-			data: data, 
-			dataType: 'json', 
-			timeout: 10000, 
-			success: function (response) {
-				if (response.status === 'success') {
-					if (callback !== undefined) {
-						callback(null, response);
-					}
-				}
-				else {
-					callback(response.msg);
-				}
-			}
-		}).fail(function () {
-			callback('Failed connecting to ' + url);
-		});
-	}, 
+export function get (url) {
 
-	get (url, callback) {
-		$.ajax({
-			url: url, 
-			dataType: 'json', 
-			timeout: 5000, 
-			success: function (response) {
-				if (response.status === 'success') {
-					if (callback !== undefined) {
-						callback(null, response.data);
-					}
-				}
-				else {
-					callback(response.msg);
-				}
+	return new Promise((resolve, reject) => {
+
+		fetch(url).then((response) => {
+
+			return response.json();
+
+		}).then((json) => {
+
+			if (json.status === 'success') {
+				resolve(json.data);
 			}
-		}).fail(function () {
-			callback('Failed connecting to ' + url);
-		});	
-	}
-};
+			else {
+				reject(json.msg);
+			}
+
+		}).catch(reject);
+	});
+}
+
+export function post (url, data) {
+
+	return new Promise((resolve, reject) => {
+
+		fetch(url, {
+			method: 'post', 
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		}).then((response) => {
+
+			return response.json();
+
+		}).then((json) => {
+
+			if (json.status === 'success') {
+				resolve(json.data);
+			}
+			else {
+				reject(json.msg);
+			}
+
+		}).catch(reject);
+	});
+}

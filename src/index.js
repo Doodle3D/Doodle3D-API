@@ -1,4 +1,4 @@
-import rest from './restapi.js';
+import * as rest from './restapi.js';
 import ConfigAPI from './configapi.js';
 import InfoAPI from './infoapi.js';
 import NetworkAPI from './networkapi.js';
@@ -31,36 +31,35 @@ export default class {
 	}
 
 	startUpdateLoop () {
-		var scope = this;
 
-		this.network.alive(function (error, data) {
-			if (error) {
-				if (scope.alive) {
-					scope.alive = false;
+		this.network.alive().then(() => {
 
-					if (scope.ondisconnect !== undefined) {
-						scope.ondisconnect();
-					}
+			this.alive = true;
+			if (this.onconnect !== undefined) {
+				this.onconnect();
+			}
+
+			if (!this.loaded) {
+				this.loaded = true;
+			}
+
+			this._updateState();
+
+		}).catch(() => {
+
+			if (this.alive) {
+				this.alive = false;
+
+				if (this.ondisconnect !== undefined) {
+					this.ondisconnect();
 				}
-				console.warn(error);
-				
-				setTimeout(function () {
-					scope.startUpdateLoop();
-				}, 1000);
-
-				return;
 			}
+			console.warn(error);
+			
+			setTimeout(() => {
+				this.startUpdateLoop();
+			}, 1000);
 
-			scope.alive = true;
-			if (scope.onconnect !== undefined) {
-				scope.onconnect();
-			}
-
-			if (!scope.loaded) {
-				scope.loaded = true;
-			}
-
-			scope._updateState();
 		});
 
 		return this;
@@ -81,66 +80,54 @@ export default class {
 	}
 
 	stopPrint (settings) {
-		var scope = this;
 
 		this._printBatches = [];
 		this._currentBatch = 0;
 
 		this.printer.stop({
 			'gcode': settings.endCode()
-		}, function (error, data) {
-			if (error) {
-				console.warn(error);
-				scope.startUpdateLoop();
-
-				return;
-			}
+		}).then((data) => {
 
 			console.log('Printer stop command sent');
+		}).catch((error) => {
+
+			console.warn(error);
 		});
 
 		return this;
 	}
 
 	_updateLoop () {
-		var scope = this;
-
 		if (this._printBatches.length > 0 && (this.state['buffered_lines'] + this._printBatches[0].length) <= this.maxBufferedLines) {
 		//if (this._printBatches.length > 0 ) {
 			this._printBatch();
 		}
 		else {
-			setTimeout(function () {
-				scope._updateState();
+			setTimeout(() => {
+				this._updateState();
 			}, 1000);
 		}
 	}
 
 	_updateState () {
 		//que api calls so they don't overload the d3d box
-		var scope = this;
 
-		this.info.status(function (error, data) {
-			if (error) {
-				console.warn(error);
-				scope.startUpdateLoop();
+		this.info.status().then((data) => {
+			this.state = data;
 
-				return;
+			if (this.onupdate !== undefined) {
+				this.onupdate(data);
 			}
 
-			scope.state = data;
+			this._updateLoop();
+		}).catch((error) => {
 
-			if (scope.onupdate !== undefined) {
-				scope.onupdate(data);
-			}
-
-			scope._updateLoop();
+			console.warn(error);
+			this.startUpdateLoop();
 		});
 	}
 
 	_printBatch () {
-		var scope = this;
-
 		var gcode = this._printBatches.shift();
 
 		this.printer.print({
@@ -148,26 +135,24 @@ export default class {
 			'first': ((this._currentBatch === 0) ? true : false), 
 			'gcode': gcode, 
 			'last': ((this._printBatches.length === 0) ? true : false) //only for debug purposes
-		}, function (error, data) {
-			if (error) {
-				scope._printBatches.unshift(gcode);
-				
-				console.warn(error);
-				scope.startUpdateLoop();
+		}).then((data) => {
 
-				return;
-			}
+			console.log('batch sent: ' + this._currentBatch, data);
 
-			console.log('batch sent: ' + scope._currentBatch, data);
-
-			if (scope._printBatches.length > 0) {
-				scope._currentBatch ++;
+			if (this._printBatches.length > 0) {
+				this._currentBatch ++;
 			}
 			else {
 				console.log('Finish sending gcode to printer');
 			}
 
-			scope._updateState();
+			this._updateState();
+		}).catch((error) => {
+			
+			this._printBatches.unshift(gcode);
+				
+			console.warn(error);
+			this.startUpdateLoop();
 		});
 	}
 }

@@ -1,4 +1,4 @@
-import rest from './restapi.js';
+import * as rest from './restapi.js';
 
 export default class {
 	constructor (localIP) {
@@ -6,22 +6,17 @@ export default class {
 		this.api = 'http://' + localIP + '/d3dapi/';
 	}
 
-	get (keys, callback) {
-		rest.get(this.api + 'config/?' + keys.join('=&') + '=', callback);
+	get (keys) {
+		return rest.get(this.api + 'config/?' + keys.join('=&') + '=');
 	}
 
-	getAll (callback) {
-		rest.get(this.api + 'config/all', callback);
+	getAll () {
+		return rest.get(this.api + 'config/all');
 	}
 
-	set (data, callback) {
+	set (data) {
 		var scope = this;
 
-		rest.post(this.api + 'config', data, function (response) {
-
-			if (callback !== undefined) {
-				callback(response);
-			}
-		});
+		return rest.post(this.api + 'config', data);
 	}
 }

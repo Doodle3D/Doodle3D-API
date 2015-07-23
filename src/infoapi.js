@@ -1,4 +1,4 @@
-import rest from './restapi.js';
+import * as rest from './restapi.js';
 
 export default class {
 	constructor (localIP) {
@@ -6,19 +6,19 @@ export default class {
 		this.api = `http://${localIP}/d3dapi/`;
 	}
 
-	get (callback) {
-		rest.get(this.api + 'info', callback);
+	get () {
+		return rest.get(this.api + 'info');
 	}
 
-	status (callback) {
-		rest.get(this.api + 'info/status', callback);
+	status () {
+		return rest.get(this.api + 'info/status');
 	}
 
 	downloadLogFiles () {
 		window.location = this.api + 'info/logfiles';
 	}
 
-	acces (callback) {
-		rest.get(this.api + 'info/access', callback);
+	acces () {
+		return rest.get(this.api + 'info/access');
 	}
 }

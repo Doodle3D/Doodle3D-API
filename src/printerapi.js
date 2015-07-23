@@ -1,4 +1,4 @@
-import rest from './restapi.js';
+import * as rest from './restapi.js';
 
 export default class {
 	constructor (localIP) {
@@ -6,31 +6,31 @@ export default class {
 		this.api = `http://${localIP}/d3dapi/`;
 	}
 
-	temperature (callback) {
-		rest.get(this.api + 'printer/temperature', callback);
+	temperature () {
+		return rest.get(this.api + 'printer/temperature');
 	}
 
-	progress (callback) {
-		rest.get(this.api + 'printer/progress', callback);
+	progress () {
+		return rest.get(this.api + 'printer/progress');
 	}
 
-	state (callback) {
-		rest.get(this.api + 'printer/state', callback);
+	state () {
+		return rest.get(this.api + 'printer/state');
 	}
 
-	listAll (callback) {
-		rest.get(this.api + 'printer/listall', callback);
+	listAll () {
+		return rest.get(this.api + 'printer/listall');
 	}
 
-	heatup (callback) {
-		rest.post(this.api + 'printer/heatup', {}, callback);
+	heatup () {
+		return rest.post(this.api + 'printer/heatup', {});
 	}
 
-	print (data, callback) {
-		rest.post(this.api + 'printer/print', data, callback);
+	print (data) {
+		return rest.post(this.api + 'printer/print', data);
 	}
 
-	stop (data, callback) {
-		rest.post(this.api + 'printer/stop', data, callback);
+	stop (data) {
+		return rest.post(this.api + 'printer/stop', data);
 	}
 }

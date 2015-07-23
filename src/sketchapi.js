@@ -1,4 +1,4 @@
-import rest from './restapi.js';
+import * as rest from './restapi.js';
 
 export default class {
 	constructor (localIP) {
@@ -6,21 +6,21 @@ export default class {
 		this.api = `http://${localIP}/d3dapi/`;
 	}
 
-	getSketch (id, callback) {
-		rest.get(this.api + 'sketch/?id=' + id, callback);
+	getSketch (id) {
+		return rest.get(this.api + 'sketch/?id=' + id);
 	}
 
-	set (data, callback) {
-		rest.post(this.api + 'sketch', {
+	set (data) {
+		return rest.post(this.api + 'sketch', {
 			'data': data
-		}, callback);
+		});
 	}
 
-	status (callback) {
-		rest.get(this.api + 'sketch/status', callback);
+	status () {
+		return rest.get(this.api + 'sketch/status');
 	}
 
-	clear (callback) {
-		rest.post(this.api + 'sketch/clear', callback);
+	clear () {
+		return rest.post(this.api + 'sketch/clear');
 	}
 }

@@ -1,4 +1,4 @@
-import rest from './restapi.js';
+import * as rest from './restapi.js';
 
 export default class {
 	constructor (localIP) {
@@ -6,7 +6,7 @@ export default class {
 		this.api = `http://${localIP}/d3dapi/`;
 	}
 
-	versions (callback) {
-		rest.get(this.api + 'system/fwversions', callback);
+	versions () {
+		return rest.get(this.api + 'system/fwversions');
 	}
 }

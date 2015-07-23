@@ -1,4 +1,4 @@
-import rest from './restapi.js';
+import * as rest from './restapi.js';
 
 export default class {
 	constructor (localIP) {
@@ -6,45 +6,49 @@ export default class {
 		this.api = `http://${localIP}/d3dapi/`;
 	}
 
-	scan (callback) {
-		rest.get(this.api + 'network/scan', callback);
+	scan () {
+		return rest.get(this.api + 'network/scan');
 	}
 
-	known (callback) {
-		rest.get(this.api + 'network/known', callback);
+	known () {
+		return rest.get(this.api + 'network/known');
 	}
 
-	status (callback) {
-		rest.get(this.api + 'network/status', callback);
+	status () {
+		return rest.get(this.api + 'network/status');
 	}
 
-	assosiate (data, callback) {
-		rest.post(this.api + 'network/associate', data, callback);	
+	assosiate (ssid, phrase = null, recreate = false) {
+
+		var data = {ssid, recreate};
+		if (phrase) phrase = phrase;
+
+		return rest.post(this.api + 'network/associate', data);
 	}
 
-	disassosiate (callback) {
+	disassosiate () {
 		//not tested
 
-		rest.post(this.api + 'network/disassociate', {}, callback);
+		return rest.post(this.api + 'network/disassociate', {});
 	}
 
-	openAccesPoint (callback) {
+	openAccesPoint () {
 		//not tested
 
-		rest.post(this.api + 'network/openap', {}, callback);
+		return rest.post(this.api + 'network/openap', {});
 	}
 
-	remove (ssid, callback) {
-		rest.post(this.api + 'network/remove', {
+	remove (ssid) {
+		return rest.post(this.api + 'network/remove', {
 			'ssid': ssid
-		}, callback);
+		});
 	}
 
-	signin (callback) {
-		rest.get(this.api + 'network/signin', callback);
+	signin () {
+		return rest.get(this.api + 'network/signin');
 	}
 
-	alive (callback) {
-		rest.get(this.api + 'network/alive', callback);
+	alive () {
+		return rest.get(this.api + 'network/alive');
 	}
 }
