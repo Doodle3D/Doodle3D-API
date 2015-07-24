@@ -39,10 +39,16 @@ doodle3DManager.addEventListener('boxappeared', (event) => {
 
 	box.addEventListener('connect', (event) => {
 		row.style.color = 'black';
+
+		console.log('connect');
+
+		box.printer.sendGCode("G1 X100 X100");
 	});
 
 	box.addEventListener('disconnect', (event) => {
 		row.style.color = 'gray';
+
+		console.log('disconnect');
 	});
 
 	box.addEventListener('update', (event) => {
@@ -57,7 +63,6 @@ doodle3DManager.addEventListener('boxappeared', (event) => {
 			hasControl.innerHTML = status.has_control;
 			hotend.innerHTML = status.hotend;
 			hotendTarget.innerHTML = status.hotend_target;
-			state.innerHTML = status.state;
 			totalLines.innerHTML = status.total_lines;
 		}
 		else {
@@ -68,7 +73,6 @@ doodle3DManager.addEventListener('boxappeared', (event) => {
 			hasControl.innerHTML = '';
 			hotend.innerHTML = '';
 			hotendTarget.innerHTML = '';
-			state.innerHTML = '';
 			totalLines.innerHTML = '';
 		}
 	});

@@ -14,6 +14,10 @@ export default class extends EventDispatcher {
 		if (autoUpdate) {
 			this._checkNew();
 
+			if (this.interval !== undefined) {
+				clearInterval(this.interval);
+			}
+
 			this.interval = setInterval(() => {
 				this._checkNew();
 			}, rate);
@@ -39,19 +43,15 @@ export default class extends EventDispatcher {
 
 	_checkNew () {
 		rest.get(this.api + 'list.php').then((boxes) => {
-			var knownIPs = [];
-			for (var i = 0; i < this.boxes.length; i ++) {
-				var boxData = this.boxes[i].boxData;
-				knownIPs.push(boxData.localip);
-			}
+			
+			var knownIPs = this.boxes.map((box) => box.boxData.localip);
 
-			for (var i = 0; i < boxes.length; i ++) {
-				var boxData = boxes[i];
-
+			for (var boxData of boxes) {
 				if (knownIPs.indexOf(boxData.localip) === -1) {
 					this.addBox(boxData);
 				}
 			}
+
 		});
 	}
 }

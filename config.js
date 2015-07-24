@@ -20,6 +20,7 @@ System.config({
     "casperlamboo/EventDispatcher": "github:casperlamboo/EventDispatcher@master",
     "core-js": "npm:core-js@0.9.18",
     "github/fetch": "github:github/fetch@0.9.0",
+    "jquery": "github:components/jquery@2.1.4",
     "traceur": "github:jmcriffey/bower-traceur@0.0.90",
     "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.90",
     "github:jspm/nodelibs-process@0.1.1": {

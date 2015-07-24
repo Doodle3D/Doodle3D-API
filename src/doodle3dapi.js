@@ -25,19 +25,30 @@ export default class extends EventDispatcher {
 		this.update = new UpdateAPI(this.api);
 		
 		this.alive = false;
-
-		this.maxBatchSize = 10*1024;
-		this.maxBufferedLines = 1024*1024;
+		this.autoUpdate = false;
 		
 		this.state = {};
-
-		this._printBatches = [];
-		this._currentBatch = 0;
-
-		this.loaded = false;
 	}
 
-	setAutoUpdate (autoUpdate) {
+	setAutoUpdate (autoUpdate = true, updateInterval = 1000) {
+		
+		this.updateInterval = updateInterval;
+
+		if (this.autoUpdate === autoUpdate) {
+			return;
+		}
+
+		this.autoUpdate = autoUpdate;
+
+		if (autoUpdate) {
+			this._initLoop();
+		}
+
+		return this;
+	}
+
+	_initLoop () {
+
 		this.network.alive().then(() => {
 
 			this.alive = true;
@@ -46,14 +57,12 @@ export default class extends EventDispatcher {
 				type: 'connect'
 			});
 
-			if (!this.loaded) {
-				this.loaded = true;
-			}
-
-			this._updateState();
+			this._updateStateLoop();
 
 		}).catch((error) => {
+
 			if (this.alive) {
+
 				this.alive = false;
 
 				this.dispatchEvent({
@@ -62,60 +71,14 @@ export default class extends EventDispatcher {
 			}
 			
 			setTimeout(() => {
-				this.setAutoUpdate();
-			}, 1000);
-
+				this._initLoop();
+			}, this.updateInterval);
 		});
-
-		return this;
 	}
 
-	print (gcode) {
-		this._currentBatch = 0;
-
-		var lastIndex = 0;
-		while (lastIndex !== (gcode.length - 1)) {
-			var index = gcode.lastIndexOf('\n', lastIndex + maxBatchSize);
-			var batch = gcode.substring(lastIndex, index);
-			lastIndex = index;
-
-			this.printBatches.push(batch);
-		}
-
-		return this;
-	}
-
-	stopPrint (endCode = '') {
-
-		this._printBatches = [];
-		this._currentBatch = 0;
-
-		this.printer.stop(endCode).then((data) => {
-			
-			console.log('Printer stop command sent');
-		
-		});
-
-		return this;
-	}
-
-	_updateLoop () {
-		if (this._printBatches.length > 0 && (this.state['buffered_lines'] + this._printBatches[0].length) <= this.maxBufferedLines) {
-		//if (this._printBatches.length > 0 ) {
-			this._printBatch();
-		}
-		else {
-			setTimeout(() => {
-				this._updateState();
-			}, 1000);
-		}
-	}
-
-	_updateState () {
-		//que api calls so they don't overload the d3d box
+	_updateStateLoop () {
 
 		this.info.status().then((state) => {
-
 			this.state = state;
 
 			this.dispatchEvent({
@@ -123,38 +86,18 @@ export default class extends EventDispatcher {
 				state
 			});
 
-			this._updateLoop();
-		}).catch((error) => {
-
-			console.warn(error);
-			this.setAutoUpdate();
-		
-		});
-	}
-
-	_printBatch () {
-		var gcode = this._printBatches.shift();
-		var start = (this._currentBatch === 0) ? true : false;
-		var first = (this._currentBatch === 0) ? true : false;
-		var last = (this._printBatches.length === 0) ? true : false; //only for the node js server
-
-		this.printer.print(gcode, start, first, last).then((data) => {
-			console.log('batch sent: ' + this._currentBatch, data);
-
-			if (this._printBatches.length > 0) {
-				this._currentBatch ++;
-			}
-			else {
-				console.log('Finish sending gcode to printer');
+			if (this.autoUpdate) {
+				setTimeout(() => {
+					this._updateStateLoop();
+				}, this.updateInterval);
 			}
 
-			this._updateState();
 		}).catch((error) => {
-			console.warn(error);
-			
-			this._printBatches.unshift(gcode);
-				
-			this.setAutoUpdate();
+			if (this.autoUpdate) {
+				setTimeout(() => {
+					this._initLoop();
+				}, this.updateInterval);
+			}
 		});
 	}
 }

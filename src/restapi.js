@@ -1,3 +1,52 @@
+import $ from 'jquery';
+
+export function get (url) {
+
+	return new Promise((resolve, reject) => {
+
+		$.ajax({
+			url: url, 
+			dataType: 'json', 
+			timeout: 5000, 
+			success: (response) => {
+
+				if (response.status === 'success') {
+					resolve(response.data);
+				}
+				else {
+					reject(response.msg);
+				}
+			}
+		}).fail(reject);	
+
+	});
+}
+
+export function post (url, data) {
+
+	return new Promise((resolve, reject) => {
+
+		$.ajax({
+			url: url, 
+			type: 'POST', 
+			data: data, 
+			dataType: 'json', 
+			timeout: 10000, 
+			success: (response) => {
+
+				if (response.status === 'success') {
+					resolve(response.data);
+				}
+				else {
+					reject(response.msg);
+				}
+
+			}
+		}).fail(reject);
+	});
+}
+
+/*
 import 'github/fetch';
 
 export function get (url) {
@@ -18,6 +67,7 @@ export function get (url) {
 			}
 
 		}).catch(reject);
+
 	});
 }
 
@@ -27,9 +77,9 @@ export function post (url, data) {
 
 		fetch(url, {
 			method: 'post', 
+			enctype: 'x-www-form-urlencoded', 
 			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
+				'Accept': 'application/json'
 			},
 			body: JSON.stringify(data)
 		}).then((response) => {
@@ -48,3 +98,4 @@ export function post (url, data) {
 		}).catch(reject);
 	});
 }
+*/
