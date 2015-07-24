@@ -17,6 +17,7 @@ System.config({
   "map": {
     "babel": "npm:babel-core@5.7.4",
     "babel-runtime": "npm:babel-runtime@5.7.0",
+    "casperlamboo/EventDispatcher": "github:casperlamboo/EventDispatcher@master",
     "core-js": "npm:core-js@0.9.18",
     "github/fetch": "github:github/fetch@0.9.0",
     "traceur": "github:jmcriffey/bower-traceur@0.0.90",

@@ -1,9 +1,8 @@
 import * as rest from './restapi.js';
 
 export default class {
-	constructor (localIP) {
-		this.localIP = localIP;
-		this.api = `http://${localIP}/d3dapi/`;
+	constructor (api) {
+		this.api = api;
 	}
 
 	get () {

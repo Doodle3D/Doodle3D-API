@@ -1,9 +1,8 @@
 import * as rest from './restapi.js';
 
 export default class {
-	constructor (localIP) {
-		this.localIP = localIP;
-		this.api = `http://${localIP}/d3dapi/`;
+	constructor (api) {
+		this.api = api;
 	}
 
 	scan () {
@@ -19,9 +18,8 @@ export default class {
 	}
 
 	assosiate (ssid, phrase = null, recreate = false) {
-
 		var data = {ssid, recreate};
-		if (phrase) phrase = phrase;
+		if (phrase) data.phrase = phrase;
 
 		return rest.post(this.api + 'network/associate', data);
 	}

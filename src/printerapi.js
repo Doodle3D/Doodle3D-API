@@ -1,9 +1,8 @@
 import * as rest from './restapi.js';
 
 export default class {
-	constructor (localIP) {
-		this.localIP = localIP;
-		this.api = `http://${localIP}/d3dapi/`;
+	constructor (api) {
+		this.api = api;
 	}
 
 	temperature () {
@@ -26,11 +25,14 @@ export default class {
 		return rest.post(this.api + 'printer/heatup', {});
 	}
 
-	print (data) {
+	print (gcode = '', first = false, start = false, last = false) {
+		var data = {gcode, first, start}
+		if (last) data.last = last;
+
 		return rest.post(this.api + 'printer/print', data);
 	}
 
-	stop (data) {
-		return rest.post(this.api + 'printer/stop', data);
+	stop (gcode = '') {
+		return rest.post(this.api + 'printer/stop', {gcode});
 	}
 }
