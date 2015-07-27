@@ -14,6 +14,7 @@ export default class extends EventDispatcher {
 			wifiboxid: 'Node JS Server', 
 			localip: '127.0.0.1:2000'
 		}];
+		this.checkNonServerBoxes = true;
 		this.api = 'http://connect.doodle3d.com/api/';
 	}
 
@@ -78,8 +79,10 @@ export default class extends EventDispatcher {
 		var request = rest.get(this.api + 'list.php');
 		request.then((boxes) => {
 
-			boxes = boxes.concat(this.nonServerBoxes);
-			
+			if (this.checkNonServerBoxes) {
+				boxes = boxes.concat(this.nonServerBoxes);
+			}
+
 			var knownIPs = this.boxes.map((box) => box.boxData.localip);
 
 			for (var boxData of boxes) {

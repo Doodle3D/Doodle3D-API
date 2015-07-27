@@ -40,10 +40,10 @@ export default class {
 		this._currentBatch = 0;
 
 		var lastIndex = 0;
-		while (lastIndex !== (gcode.length - 1)) {
+		while (lastIndex !== gcode.length) {
 			var index = gcode.lastIndexOf('\n', lastIndex + this.maxBatchSize);
 			var batch = gcode.substring(lastIndex, index);
-			lastIndex = index;
+			lastIndex = index + 1; //skip next return
 
 			this._printBatches.push(batch);
 		}
@@ -68,7 +68,7 @@ export default class {
 				if (this._printBatches.length > 0) {
 					if (progress['buffered_lines'] + this.maxBatchSize < this.maxBufferedLines) {
 						this._currentBatch ++;
-						_sendBatch();
+						this._sendBatch();
 					}
 					else {
 						setTimeout(() => {
