@@ -11,7 +11,7 @@ export function get (url) {
 			success: (response) => {
 
 				if (response.status === 'success') {
-					resolve(response.data);
+					resolve(response.data, response.msg);
 				}
 				else {
 					reject(response.msg);

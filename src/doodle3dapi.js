@@ -49,7 +49,9 @@ export default class extends EventDispatcher {
 
 	_initLoop () {
 
-		this.network.alive().then(() => {
+		var request = this.network.alive();
+
+		request.then(() => {
 
 			this.alive = true;
 
@@ -59,7 +61,9 @@ export default class extends EventDispatcher {
 
 			this._updateStateLoop();
 
-		}).catch((error) => {
+		});
+
+		request.catch((error) => {
 
 			if (this.alive) {
 

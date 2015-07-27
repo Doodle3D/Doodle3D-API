@@ -8,7 +8,8 @@ export default class {
 		this._currentBatch = 0;
 
 		this.maxBatchSize = 10*1024;
-		this.maxBufferedLines = 1024*1024; //yet to be implimented
+		this.maxBufferedLines = 1024*1024;
+		this.fullBufferTimeout = 10000;
 	}
 
 	temperature () {
@@ -56,20 +57,35 @@ export default class {
 		var first = (this._currentBatch === 0) ? true : false;
 		var last = (this._printBatches.length === 0) ? true : false; //only for the node js server
 
-		this.print(gcode, start, first, last).then((data) => {
+		var printRequest = this.print(gcode, start, first, last);
+		printRequest.then((data) => {
 
 			console.log('batch sent: ' + this._currentBatch, data);
 
-			if (this._printBatches.length > 0) {
-				this._currentBatch ++;
-				_sendBatch();
-			}
-			else {
-				console.log('Finish sending gcode to printer');
-			}
-		}).catch((error) => {
+			var progressRequest = this.progress()
+			progressRequest.then((progress) => {
+
+				if (this._printBatches.length > 0) {
+					if (progress['buffered_lines'] + this.maxBatchSize < this.maxBufferedLines) {
+						this._currentBatch ++;
+						_sendBatch();
+					}
+					else {
+						setTimeout(() => {
+							this._sendBatch();
+						}, this.fullBufferTimeout);
+					}
+
+				}
+				else {
+					console.log('Finish sending gcode to printer');
+				}
+
+			});
+		});
+		printRequest.catch((error) => {
 			this._printBatches.unshift(gcode);
-			
+
 			setTimeout(() => {
 				this._sendBatch();
 			}, 1000);
