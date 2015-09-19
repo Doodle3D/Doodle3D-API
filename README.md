@@ -2,7 +2,7 @@
 Doodle3D API for communication with the Doodle3D WiFi-Box
 
 ```javascript
-import Doodle3DManager from 'src/doodle3dmanager.js';
+import {Doodle3DManager} from 'Doodle3D/Doodle3D-API';
 
 const doodle3DManager = new Doodle3DManager();
 
