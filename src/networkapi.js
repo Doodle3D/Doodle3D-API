@@ -27,7 +27,7 @@ export default class {
 		return rest.post(`${this.api}network/associate`, data);
 	}
 
-	disassosiate () {
+	disassociate () {
 		//not tested
 
 		return rest.post(`${this.api}network/disassociate`, {});

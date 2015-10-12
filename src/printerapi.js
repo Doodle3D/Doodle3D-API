@@ -37,9 +37,10 @@ export default class {
 	}
 
 	stop (gcode = '') {
-		this._currentBatch = 0;
-		this._printBatches = [];
+		let data = {
+			gcode
+		};
 
-		return rest.post(`${this.api}printer/stop`, {gcode});
+		return rest.post(`${this.api}printer/stop`, data);
 	}
 }

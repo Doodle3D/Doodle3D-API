@@ -1,11 +1,14 @@
 import $ from 'jquery';
 
+const GET_TIMEOUT = 5000;
+const POST_TIMEOUT = 10000;
+
 export function get (url) {
 	return new Promise((resolve, reject) => {
 		$.ajax({
 			url: url, 
 			dataType: 'json', 
-			timeout: 5000, 
+			timeout: GET_TIMEOUT, 
 			success: (response) => {
 				if (response.status === 'success') {
 					resolve(response.data, response.msg);
@@ -25,7 +28,7 @@ export function post (url, data) {
 			type: 'POST', 
 			data: data, 
 			dataType: 'json', 
-			timeout: 10000, 
+			timeout: POST_TIMEOUT, 
 			success: (response) => {
 				if (response.status === 'success') {
 					resolve(response.data);

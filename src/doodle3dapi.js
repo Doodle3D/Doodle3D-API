@@ -16,14 +16,6 @@ export default class extends EventDispatcher {
 		this.boxData = boxData;
 
 		this.api = `http://${boxData.localip}/d3dapi/`;
-
-		this.config = new ConfigAPI(this.api);
-		this.info = new InfoAPI(this.api);
-		this.network = new NetworkAPI(this.api);
-		this.printer = new PrinterAPI(this.api);
-		this.sketch = new SketchAPI(this.api);
-		this.system = new SystemAPI(this.api);
-		this.update = new UpdateAPI(this.api);
 		
 		this.alive = false;
 		this.autoUpdate = false;
@@ -32,6 +24,14 @@ export default class extends EventDispatcher {
 		this.maxBatchSize = 10*1024;
 		this.maxBufferSize = 1024*1024;
 		this.fullBufferTimeout = 10000;
+
+		this.config = new ConfigAPI(this.api);
+		this.info = new InfoAPI(this.api);
+		this.network = new NetworkAPI(this.api);
+		this.printer = new PrinterAPI(this.api);
+		this.sketch = new SketchAPI(this.api);
+		this.system = new SystemAPI(this.api);
+		this.update = new UpdateAPI(this.api);
 	}
 
 	setAutoUpdate (autoUpdate = true, updateInterval = 1000) {
@@ -111,29 +111,20 @@ export default class extends EventDispatcher {
 	}
 
 	async _update () {
-		let alive = await this.checkAlive();
-		if (alive) {
-			while (this.autoUpdate) {
-				try {
-					this.state = await this.info.status();
+		while (this.autoUpdate) {
+			try {
+				this.state = await this.info.status();
 
-					this.dispatchEvent({
-						type: 'update', 
-						state: this.state
-					});
-
-					await sleep(this.updateInterval);
-				}
-				catch (error) {
-					this._update();
-					break;
-				}
+				this.dispatchEvent({
+					type: 'update', 
+					state: this.state
+				});
 			}
-		}
-		else {
-			await sleep(this.updateInterval);
+			catch (error) {
+				await this.checkAlive();
+			}
 
-			this._update();
+			await sleep(this.updateInterval);
 		}
 	}
 
