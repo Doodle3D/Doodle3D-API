@@ -6,24 +6,24 @@ export default class {
 	}
 
 	status () {
-		return rest.get(this.api + 'update/status');
+		return rest.get(`${this.api}update/status`);
 	}
 
 	download () {
 		//not tested
 
-		return rest.post(this.api + 'update/download', {});
+		return rest.post(`${this.api}update/download`, {});
 	}
 
 	install () {
 		//not tested
 
-		return rest.post(this.api + 'update/install', {});
+		return rest.post(`${this.api}update/install`, {});
 	}
 
 	clear () {
 		//not tested
 
-		return rest.post(this.api + 'update/clear', {});
+		return rest.post(`${this.api}update/clear`, {});
 	}
 }

@@ -6,47 +6,50 @@ export default class {
 	}
 
 	scan () {
-		return rest.get(this.api + 'network/scan');
+		return rest.get(`${this.api}network/scan`);
 	}
 
 	known () {
-		return rest.get(this.api + 'network/known');
+		return rest.get(`${this.api}network/known`);
 	}
 
 	status () {
-		return rest.get(this.api + 'network/status');
+		return rest.get(`${this.api}network/status`);
 	}
 
-	assosiate (ssid, phrase = null, recreate = false) {
-		var data = {ssid, recreate};
-		if (phrase) data.phrase = phrase;
+	assosiate (ssid, phrase, recreate = false) {
+		var data = {
+			ssid, 
+			recreate, 
+			phrase
+		};
 
-		return rest.post(this.api + 'network/associate', data);
+		return rest.post(`${this.api}network/associate`, data);
 	}
 
 	disassosiate () {
 		//not tested
 
-		return rest.post(this.api + 'network/disassociate', {});
+		return rest.post(`${this.api}network/disassociate`, {});
 	}
 
 	openAccesPoint () {
 		//not tested
 
-		return rest.post(this.api + 'network/openap', {});
+		return rest.post(`${this.api}network/openap`, {});
 	}
 
 	remove (ssid) {
-		return rest.post(this.api + 'network/remove', {
+		return rest.post(`${this.api}network/remove`, {
 			'ssid': ssid
 		});
 	}
 
 	signin () {
-		return rest.get(this.api + 'network/signin');
+		return rest.get(`${this.api}network/signin`);
 	}
 
 	alive () {
-		return rest.get(this.api + 'network/alive');
+		return rest.get(`${this.api}network/alive`);
 	}
 }

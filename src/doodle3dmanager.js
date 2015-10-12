@@ -1,41 +1,95 @@
 import * as rest from './restapi.js';
 import Doodle3DAPI from './doodle3dapi.js';
 import EventDispatcher from 'casperlamboo/EventDispatcher';
+import {sleep} from './utils.js';
 
 export default class extends EventDispatcher {
 	constructor () {
 		super();
 
+		this.api = 'http://connect.doodle3d.com/api/';
+
 		this.boxes = [];
+
 		this.nonServerBoxes = [{
 			wifiboxid: 'Wired Printer', 
 			localip: '192.168.5.1'
-		}, {
+		}/*, {
 			wifiboxid: 'Node JS Server', 
-			localip: '127.0.0.1:2000'
-		}];
+			localip: '127.0.0.1:3000'
+		}*/];
 		this.checkNonServerBoxes = true;
-		this.api = 'http://connect.doodle3d.com/api/';
+
+		this.autoUpdate = false;
 	}
 
-	setAutoUpdate (autoUpdate = true, rate = 5000) {
+	setAutoUpdate (autoUpdate = true, updateInterval = 1000) {	
+		this.updateInterval = updateInterval;
+
+		if (this.autoUpdate === autoUpdate) {
+			return;
+		}
+
+		this.autoUpdate = autoUpdate;
+
 		if (autoUpdate) {
 			this._update();
-
-			if (this.interval !== undefined) {
-				clearInterval(this.interval);
-			}
-
-			this.interval = setInterval(() => {
-				this._update();
-			}, rate);
-		}
-		else if (this.interval !== undefined) {
-			clearInterval(this.interval);
-			delete this.interval;
 		}
 
 		return this;
+	}
+
+	async _update () {
+		while (this.autoUpdate) {
+			await this._checkAlive();
+			await this._checkNew();
+
+			await sleep(this.updateInterval);
+		}
+	}
+
+	_checkAlive () {
+		return new Promise(async (resolve, reject) => {
+			for (let box of this.boxes) {
+				let alive = await box.checkAlive();
+
+				if (!alive) {
+					this._removeBox(box);
+				}
+			}
+			resolve();
+		});
+	}
+
+	_checkNew () {
+		return new Promise(async (resolve, reject) => {		
+			try {
+				let boxes = await rest.get(`${this.api}list.php`);
+
+				if (this.checkNonServerBoxes) {
+					boxes = boxes.concat(this.nonServerBoxes);
+				}
+
+				let knownIPs = this.boxes.map((box) => box.boxData.localip);
+
+				for (let boxData of boxes) {
+					if (knownIPs.indexOf(boxData.localip) === -1) {
+						let box = new Doodle3DAPI(boxData);
+
+						let alive = await box.checkAlive();
+
+						if (alive) {
+							this._addBox(box);
+						}
+					}
+				}
+
+				resolve();
+			}
+			catch (error) {
+				console.warn('fail connecting to Doodle3D server');
+			}
+		});
 	}
 
 	_addBox (box) {
@@ -48,7 +102,7 @@ export default class extends EventDispatcher {
 	}
 
 	_removeBox (box) {
-		var index = this.boxes.indexOf(box);
+		let index = this.boxes.indexOf(box);
 		if (index !== -1) {
 			this.boxes.splice(index, 1);
 			this.dispatchEvent({
@@ -56,53 +110,5 @@ export default class extends EventDispatcher {
 				box
 			});
 		}
-	}
-
-	_update () {
-		this._checkAlive();
-		this._checkNew();
-	}
-
-	_checkAlive () {
-		for (var box of this.boxes) {
-			((box) => {
-				var request = box.network.alive();
-				request.catch(() => {
-					this._removeBox(box);
-				});
-			})(box);
-		}
-	}
-
-	_checkNew () {
-
-		var request = rest.get(this.api + 'list.php');
-		request.then((boxes) => {
-
-			if (this.checkNonServerBoxes) {
-				boxes = boxes.concat(this.nonServerBoxes);
-			}
-
-			var knownIPs = this.boxes.map((box) => box.boxData.localip);
-
-			for (var boxData of boxes) {
-				if (knownIPs.indexOf(boxData.localip) === -1) {
-					var box = new Doodle3DAPI(boxData);
-					((box) => {
-						var request = box.network.alive();
-						request.then((data, msg) => {
-							this._addBox(box);
-						});
-						request.catch(() => {
-							console.log(`failed to connect with ${box.boxData.wifiboxid}`);
-						});
-
-					})(box);
-				}
-			}
-		});
-		request.catch(() => {
-			console.warn('fail connecting to Doodle3D server');
-		});
 	}
 }

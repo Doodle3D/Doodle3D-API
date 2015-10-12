@@ -5,17 +5,17 @@ export default class {
 		this.api = api;
 	}
 
-	get (keys) {
-		return rest.get(this.api + 'config/?' + keys.join('=&') + '=');
+	get (...keys) {
+		return rest.get(`${this.api}config/?${keys.join('=&')}=`);
 	}
 
 	getAll () {
-		return rest.get(this.api + 'config/all');
+		return rest.get(`${this.api}config/all`);
 	}
 
 	set (data) {
 		var scope = this;
 
-		return rest.post(this.api + 'config', data);
+		return rest.post(`${this.api}config`, data);
 	}
 }

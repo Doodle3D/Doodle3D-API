@@ -6,6 +6,6 @@ export default class {
 	}
 
 	versions () {
-		return rest.get(this.api + 'system/fwversions');
+		return rest.get(`${this.api}system/fwversions`);
 	}
 }

@@ -7,6 +7,7 @@ import PrinterAPI from './printerapi.js';
 import SketchAPI from './sketchapi.js';
 import SystemAPI from './systemapi.js';
 import UpdateAPI from './updateapi.js';
+import {sleep} from './utils.js';
 
 export default class extends EventDispatcher {
 	constructor (boxData) {
@@ -26,12 +27,14 @@ export default class extends EventDispatcher {
 		
 		this.alive = false;
 		this.autoUpdate = false;
-		
 		this.state = {};
+
+		this.maxBatchSize = 10*1024;
+		this.maxBufferSize = 1024*1024;
+		this.fullBufferTimeout = 10000;
 	}
 
 	setAutoUpdate (autoUpdate = true, updateInterval = 1000) {
-		
 		this.updateInterval = updateInterval;
 
 		if (this.autoUpdate === autoUpdate) {
@@ -41,67 +44,115 @@ export default class extends EventDispatcher {
 		this.autoUpdate = autoUpdate;
 
 		if (autoUpdate) {
-			this._initLoop();
+			this._update();
 		}
 
 		return this;
 	}
 
-	_initLoop () {
+	checkAlive () {
+		return new Promise(async (resolve, reject) => {
+			let alive;
+			try {
+				await this.network.alive();
+				alive = true;
+			}
+			catch (error) {
+				alive = false;
+			}
 
-		var request = this.network.alive();
-
-		request.then(() => {
-
-			this.alive = true;
-
-			this.dispatchEvent({
-				type: 'connect'
-			});
-
-			this._updateStateLoop();
-
-		});
-
-		request.catch((error) => {
-
-			if (this.alive) {
-
-				this.alive = false;
-
+			if (alive !== this.alive) {
 				this.dispatchEvent({
-					type: 'disconnect'
+					type: alive ? 'connect' : 'disconnect'
 				});
 			}
-			
-			setTimeout(() => {
-				this._initLoop();
-			}, this.updateInterval);
+
+			this.alive = alive;
+			resolve(alive);
 		});
 	}
 
-	_updateStateLoop () {
-
-		this.info.status().then((state) => {
-			this.state = state;
-
-			this.dispatchEvent({
-				type: 'update', 
-				state
-			});
-
-			if (this.autoUpdate) {
-				setTimeout(() => {
-					this._updateStateLoop();
-				}, this.updateInterval);
+	sendGCode (gcode) {
+		return new Promise(async (resolve, reject) => {
+			let printerState = await this.printer.state();
+			if (printerState.state !== 'idle') {
+				reject(`Cannot print, print state is ${printerState.state}`);
+				return;
 			}
 
-		}).catch((error) => {
-			if (this.autoUpdate) {
-				setTimeout(() => {
-					this._initLoop();
-				}, this.updateInterval);
+			if (!gcode.endsWith('\n')) {
+				gcode += '\n';
 			}
+
+			this._currentBatch = 0;
+
+			let lastIndex = 0;
+			let start = true;
+			while (lastIndex !== gcode.length) {
+				let index = gcode.lastIndexOf('\n', lastIndex + this.maxBatchSize);
+				let batch = gcode.substring(lastIndex, index);
+
+				let progress = await this.printer.progress();
+
+				if (progress['buffered_lines'] + batch.length < this.maxBufferSize) {
+					lastIndex = index + 1; //skip next \n
+
+					await this._sendBatch(batch, start);
+
+					start = false;
+				}
+				else {
+					await sleep(this.fullBufferTimeout);
+				}
+			}
+
+			resolve();
+		});
+	}
+
+	async _update () {
+		let alive = await this.checkAlive();
+		if (alive) {
+			while (this.autoUpdate) {
+				try {
+					this.state = await this.info.status();
+
+					this.dispatchEvent({
+						type: 'update', 
+						state: this.state
+					});
+
+					await sleep(this.updateInterval);
+				}
+				catch (error) {
+					this._update();
+					break;
+				}
+			}
+		}
+		else {
+			await sleep(this.updateInterval);
+
+			this._update();
+		}
+	}
+
+	_sendBatch (gcode, index) {
+		return new Promise (async (resolve, reject) => {
+			try {
+				let start = index === 0;
+				let first = start;
+				let printRequest = await this.printer.print(gcode, first, start);
+
+				console.log(`batch sent: ${index}`, printRequest);
+			}
+			catch (error) {
+				await sleep(1000);
+
+				await this._sendBatch(gcode, index);
+			}
+
+			resolve();
 		});
 	}
 }

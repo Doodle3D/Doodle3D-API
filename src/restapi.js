@@ -1,15 +1,12 @@
 import $ from 'jquery';
 
 export function get (url) {
-
 	return new Promise((resolve, reject) => {
-
 		$.ajax({
 			url: url, 
 			dataType: 'json', 
 			timeout: 5000, 
 			success: (response) => {
-
 				if (response.status === 'success') {
 					resolve(response.data, response.msg);
 				}
@@ -17,15 +14,12 @@ export function get (url) {
 					reject(response.msg);
 				}
 			}
-		}).fail(reject);	
-
+		}).fail(reject);
 	});
 }
 
 export function post (url, data) {
-
 	return new Promise((resolve, reject) => {
-
 		$.ajax({
 			url: url, 
 			type: 'POST', 
@@ -33,14 +27,12 @@ export function post (url, data) {
 			dataType: 'json', 
 			timeout: 10000, 
 			success: (response) => {
-
 				if (response.status === 'success') {
 					resolve(response.data);
 				}
 				else {
 					reject(response.msg);
 				}
-
 			}
 		}).fail(reject);
 	});
