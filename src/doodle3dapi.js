@@ -80,6 +80,9 @@ export default class extends EventDispatcher {
 				return;
 			}
 
+			let autoUpdateState = this.autoUpdate;
+			this.autoUpdate = false;
+
 			if (!gcode.endsWith('\n')) {
 				gcode += '\n';
 			}
@@ -95,16 +98,24 @@ export default class extends EventDispatcher {
 				let progress = await this.printer.progress();
 
 				if (progress['buffered_lines'] + batch.length < this.maxBufferSize) {
-					lastIndex = index + 1; //skip next \n
+					try {
+						await this._sendBatch(batch, start);
 
-					await this._sendBatch(batch, start);
+						start = false;
+						lastIndex = index + 1; //skip next \n
+					}
+					catch (error) {
+						console.log('error while sending gcode', error);
 
-					start = false;
+						await sleep(this.fullBufferTimeout);
+					}
 				}
 				else {
 					await sleep(this.fullBufferTimeout);
 				}
 			}
+
+			this.autoUpdate = autoUpdateState;
 
 			resolve();
 		});
@@ -131,8 +142,8 @@ export default class extends EventDispatcher {
 	_sendBatch (gcode, index) {
 		return new Promise (async (resolve, reject) => {
 			try {
-				let start = index === 0;
-				let first = start;
+				let first = index === 0;
+				let start = first;
 				let printRequest = await this.printer.print(gcode, first, start);
 
 				console.log(`batch sent: ${index}`, printRequest);

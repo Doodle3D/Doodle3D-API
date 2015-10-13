@@ -1,21 +1,19 @@
 System.config({
-  "baseURL": "/",
-  "defaultJSExtensions": true,
-  "transpiler": "babel",
-  "babelOptions": {
+  baseURL: "/",
+  defaultJSExtensions: true,
+  transpiler: "babel",
+  babelOptions: {
     "optional": [
       "runtime"
-    ], 
+    ],
     "stage": 0
   },
-  "paths": {
+  paths: {
     "github:*": "jspm_packages/github/*",
     "npm:*": "jspm_packages/npm/*"
-  }
-});
+  },
 
-System.config({
-  "map": {
+  map: {
     "babel": "npm:babel-core@5.7.4",
     "babel-runtime": "npm:babel-runtime@5.7.0",
     "casperlamboo/EventDispatcher": "github:casperlamboo/EventDispatcher@master",
@@ -37,4 +35,3 @@ System.config({
     }
   }
 });
-

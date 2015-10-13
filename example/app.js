@@ -1,26 +1,24 @@
 import Doodle3DManager from 'src/doodle3dmanager.js';
 
-let list = document.getElementById('list');
+const doodle3DManager = new Doodle3DManager();
+const TABLE = document.getElementById('table');
 
-let doodle3DManager = new Doodle3DManager();
-
-doodle3DManager.addEventListener('boxappeared', async (event) => {
-	let box = event.box;
-
-	var row = document.createElement('tr');
+doodle3DManager.addEventListener('boxappeared', ({box}) => {
+	let row = document.createElement('tr');
+	row.id = box.boxData.wifiboxid;
 	row.style.color = 'black';
 
-	var id = document.createElement('td');
-	var state = document.createElement('td');
-	var localIP = document.createElement('td');
-	var bed = document.createElement('td');
-	var bedTarget = document.createElement('td');
-	var bufferedLines = document.createElement('td');
-	var currentLine = document.createElement('td');
-	var hasControl = document.createElement('td');
-	var hotend = document.createElement('td');
-	var hotendTarget = document.createElement('td');
-	var totalLines = document.createElement('td');
+	let id = document.createElement('td');
+	let state = document.createElement('td');
+	let localIP = document.createElement('td');
+	let bed = document.createElement('td');
+	let bedTarget = document.createElement('td');
+	let bufferedLines = document.createElement('td');
+	let currentLine = document.createElement('td');
+	let hasControl = document.createElement('td');
+	let hotend = document.createElement('td');
+	let hotendTarget = document.createElement('td');
+	let totalLines = document.createElement('td');
 
 	row.appendChild(id);
 	row.appendChild(localIP);
@@ -37,10 +35,9 @@ doodle3DManager.addEventListener('boxappeared', async (event) => {
 	id.innerHTML = box.boxData.wifiboxid;
 	localIP.innerHTML = box.boxData.localip;
 
-	document.getElementById('table').appendChild(row);
+	TABLE.appendChild(row);
 
-	function update (event) {
-		let data = event.state;
+	function update ({state: data}) {
 		state.innerHTML = data.state;
 
 		if (data.state !== 'disconnected' && data.state !== 'connecting' && data.state !== 'unknown') {
@@ -64,30 +61,30 @@ doodle3DManager.addEventListener('boxappeared', async (event) => {
 			hotendTarget.innerHTML = '';
 			totalLines.innerHTML = '';
 		}
-	};
-
-	box.setAutoUpdate(true, 1000);
-
-	function update (event) {
-		console.log(event);
 	}
 
-	box.addEventListener('update', update);
+	if (box.alive) {
+		box.addEventListener('update', update);
+	}
+
+	box.addEventListener('connect', (event) => {
+		row.style.color = 'black';
+	
+		box.addEventListener('update', update);
+	});
 
 	box.addEventListener('disconnect', (event) => {
+		row.style.color = 'gray';
+	
 		box.removeEventListener('update', update);
 	});
+
+	box.setAutoUpdate(true, 1000);
 });
 
-doodle3DManager.addEventListener('boxdisappeared', (event) => {
-	let box = event.box;
-
-	for (let node of list.children) {
-		if (node.innerHTML === box.boxData.wifiboxid) {
-			list.removeChild(node);
-			break;
-		}
-	}
+doodle3DManager.addEventListener('boxdisappeared', ({box}) => {
+	let row = document.getElementById(box.boxData.wifiboxid);
+	TABLE.removeChild(row);
 });
 
 doodle3DManager.setAutoUpdate(true, 1000);
