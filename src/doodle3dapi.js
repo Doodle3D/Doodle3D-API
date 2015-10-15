@@ -1,5 +1,4 @@
 import EventDispatcher from 'casperlamboo/EventDispatcher';
-import * as rest from './restapi.js';
 import ConfigAPI from './configapi.js';
 import InfoAPI from './infoapi.js';
 import NetworkAPI from './networkapi.js';
@@ -22,7 +21,6 @@ export default class extends EventDispatcher {
 		this.state = {};
 
 		this.maxBatchSize = 10*1024;
-		this.maxBufferSize = 1024*1024;
 		this.fullBufferTimeout = 10000;
 
 		this.config = new ConfigAPI(this.api);
@@ -92,27 +90,16 @@ export default class extends EventDispatcher {
 			let lastIndex = 0;
 			let start = true;
 			while (lastIndex !== gcode.length) {
-				let index = gcode.lastIndexOf('\n', lastIndex + this.maxBatchSize);
+				let lastIndex = lastIndex + this.maxBatchSize;
+				let index = gcode.lastIndexOf('\n', lastIndex);
 				let batch = gcode.substring(lastIndex, index);
 
 				let progress = await this.printer.progress();
 
-				if (progress['buffered_lines'] + batch.length < this.maxBufferSize) {
-					try {
-						await this._sendBatch(batch, start);
+				await this._sendBatch(batch, start);
 
-						start = false;
-						lastIndex = index + 1; //skip next \n
-					}
-					catch (error) {
-						console.log('error while sending gcode', error);
-
-						await sleep(this.fullBufferTimeout);
-					}
-				}
-				else {
-					await sleep(this.fullBufferTimeout);
-				}
+				start = false;
+				lastIndex = index + 1; //skip next \n
 			}
 
 			this.autoUpdate = autoUpdateState;
@@ -139,12 +126,11 @@ export default class extends EventDispatcher {
 		}
 	}
 
-	_sendBatch (gcode, index) {
+	_sendBatch (gcode, start) {
 		return new Promise (async (resolve, reject) => {
 			try {
-				let first = index === 0;
-				let start = first;
-				let printRequest = await this.printer.print(gcode, first, start);
+				let response = await this.printer.print(gcode, start, start);
+				// maybe do something with failing response
 
 				console.log(`batch sent: ${index}`, printRequest);
 			}

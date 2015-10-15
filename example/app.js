@@ -1,4 +1,4 @@
-import Doodle3DManager from 'src/doodle3dmanager.js';
+import {Doodle3DManager} from 'src/index.js';
 
 const doodle3DManager = new Doodle3DManager();
 const TABLE = document.getElementById('table');
@@ -69,13 +69,13 @@ doodle3DManager.addEventListener('boxappeared', ({box}) => {
 
 	box.addEventListener('connect', (event) => {
 		row.style.color = 'black';
-	
+
 		box.addEventListener('update', update);
 	});
 
 	box.addEventListener('disconnect', (event) => {
 		row.style.color = 'gray';
-	
+
 		box.removeEventListener('update', update);
 	});
 

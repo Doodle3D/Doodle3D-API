@@ -3,7 +3,7 @@ import Doodle3DAPI from './doodle3dapi.js';
 import EventDispatcher from 'casperlamboo/EventDispatcher';
 import {sleep} from './utils.js';
 
-export default class extends EventDispatcher {
+export default class Doodle3DManager extends EventDispatcher {
 	constructor () {
 		super();
 
@@ -23,7 +23,7 @@ export default class extends EventDispatcher {
 		this.autoUpdate = false;
 	}
 
-	setAutoUpdate (autoUpdate = true, updateInterval = 1000) {	
+	setAutoUpdate (autoUpdate = true, updateInterval = 1000) {
 		this.updateInterval = updateInterval;
 
 		if (this.autoUpdate === autoUpdate) {
@@ -50,45 +50,52 @@ export default class extends EventDispatcher {
 
 	_checkAlive () {
 		return new Promise(async (resolve, reject) => {
-			for (let box of this.boxes) {
-				let alive = await box.checkAlive();
 
-				if (!alive) {
-					this._removeBox(box);
-				}
-			}
+			await Promise.all(this.boxes.map((box) => {
+				let promise = box.checkAlive();
+				promise.then((alive) => {
+					if (!alive) {
+						this._removeBox(box);
+					}
+				})
+
+				return promise;
+			}));
+
 			resolve();
 		});
 	}
 
 	_checkNew () {
-		return new Promise(async (resolve, reject) => {		
+		return new Promise(async (resolve, reject) => {	
+			let boxes;	
 			try {
-				let boxes = await rest.get(`${this.api}list.php`);
-
-				if (this.checkNonServerBoxes) {
-					boxes = boxes.concat(this.nonServerBoxes);
-				}
-
-				let knownIPs = this.boxes.map((box) => box.boxData.localip);
-
-				for (let boxData of boxes) {
-					if (knownIPs.indexOf(boxData.localip) === -1) {
-						let box = new Doodle3DAPI(boxData);
-
-						let alive = await box.checkAlive();
-
-						if (alive) {
-							this._addBox(box);
-						}
-					}
-				}
-
-				resolve();
+				boxes = await rest.get(`${this.api}list.php`);
 			}
 			catch (error) {
-				console.warn('fail connecting to Doodle3D server');
+				console.warn('fail connecting to Doodle3D server', error);
+				return;
 			}
+
+			if (this.checkNonServerBoxes) {
+				boxes = [...boxes, ...this.nonServerBoxes];
+			}
+
+			let knownIPs = this.boxes.map((box) => box.boxData.localip);
+
+			for (let boxData of boxes) {
+				if (knownIPs.indexOf(boxData.localip) === -1) {
+					let box = new Doodle3DAPI(boxData);
+
+					let alive = await box.checkAlive();
+
+					if (alive) {
+						this._addBox(box);
+					}
+				}
+			}
+
+			resolve();
 		});
 	}
 

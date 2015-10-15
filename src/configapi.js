@@ -14,8 +14,6 @@ export default class {
 	}
 
 	set (data) {
-		var scope = this;
-
 		return rest.post(`${this.api}config`, data);
 	}
 }
