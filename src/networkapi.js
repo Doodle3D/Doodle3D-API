@@ -45,7 +45,13 @@ export default class {
 		return rest.get(`${this.api}network/signin`);
 	}
 
-	alive () {
-		return rest.get(`${this.api}network/alive`);
+	async alive () {
+		try {
+			await rest.get(`${this.api}network/alive`);
+
+			return true;
+		} catch(error) {
+			return false;
+		}
 	}
 }
