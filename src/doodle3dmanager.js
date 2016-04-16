@@ -12,10 +12,10 @@ export default class Doodle3DManager extends EventDispatcher {
 		this.boxes = [];
 
 		this.nonServerBoxes = [{
-			wifiboxid: 'Wired Printer', 
+			wifiboxid: 'Wired Printer',
 			localip: '192.168.5.1'
 		}/*, {
-			wifiboxid: 'Node JS Server', 
+			wifiboxid: 'Node JS Server',
 			localip: '127.0.0.1:3000'
 		}*/];
 		this.checkNonServerBoxes = true;
