@@ -15,7 +15,7 @@ export default class extends EventDispatcher {
 		this.boxData = boxData;
 
 		this.api = `http://${boxData.localip}/d3dapi/`;
-		
+
 		this.alive = false;
 		this.autoUpdate = false;
 		this.state = {};
