@@ -48,55 +48,39 @@ export default class Doodle3DManager extends EventDispatcher {
 		}
 	}
 
-	_checkAlive () {
-		return new Promise(async (resolve, reject) => {
+	async _checkAlive () {
+		for (const box of boxes) {
+			const alive = await box.checkAlive();
 
-			await Promise.all(this.boxes.map((box) => {
-				let promise = box.checkAlive();
-				promise.then((alive) => {
-					if (!alive) {
-						this._removeBox(box);
-					}
-				})
-
-				return promise;
-			}));
-
-			resolve();
-		});
+			if (!alive) {
+				this._removeBox(box);
+			}
+		}
 	}
 
-	_checkNew () {
-		return new Promise(async (resolve, reject) => {	
-			let boxes;	
-			try {
-				boxes = await rest.get(`${this.api}list.php`);
+	async _checkNew () {
+		let boxes;
+		try {
+			boxes = await rest.get(`${this.api}list.php`);
+		} catch(error) {
+			throw 'fail connecting to Doodle3D server';
+		}
+
+		if (this.checkNonServerBoxes) {
+			boxes = [...boxes, ...this.nonServerBoxes];
+		}
+
+		const knownIPs = this.boxes.map((box) => box.boxData.localip);
+		const boxes = boxes.filter(({ localip }) => knownIPs.indexOf(localip) === -1);
+
+		for (const boxData of boxes) {
+			const box = new Doodle3DAPI(boxData);
+
+			const alive = await box.checkAlive();
+			if (alive) {
+				this._addBox(box);
 			}
-			catch (error) {
-				console.warn('fail connecting to Doodle3D server', error);
-				return;
-			}
-
-			if (this.checkNonServerBoxes) {
-				boxes = [...boxes, ...this.nonServerBoxes];
-			}
-
-			let knownIPs = this.boxes.map((box) => box.boxData.localip);
-
-			for (let boxData of boxes) {
-				if (knownIPs.indexOf(boxData.localip) === -1) {
-					let box = new Doodle3DAPI(boxData);
-
-					let alive = await box.checkAlive();
-
-					if (alive) {
-						this._addBox(box);
-					}
-				}
-			}
-
-			resolve();
-		});
+		}
 	}
 
 	_addBox (box) {

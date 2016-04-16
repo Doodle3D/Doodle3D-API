@@ -48,64 +48,48 @@ export default class extends EventDispatcher {
 		return this;
 	}
 
-	checkAlive () {
-		return new Promise(async (resolve, reject) => {
-			let alive;
-			try {
-				await this.network.alive();
-				alive = true;
-			}
-			catch (error) {
-				alive = false;
-			}
+	async checkAlive () {
+		const alive = await this.network.alive();
 
-			if (alive !== this.alive) {
-				this.dispatchEvent({
-					type: alive ? 'connect' : 'disconnect'
-				});
-			}
+		if (alive !== this.alive) {
+			const type = alive ? 'connect' : 'disconnect';
+			this.dispatchEvent({ type });
+		}
 
-			this.alive = alive;
-			resolve(alive);
-		});
+		this.alive = alive;
+		return alive;
 	}
 
-	sendGCode (gcode) {
-		return new Promise(async (resolve, reject) => {
-			let printerState = await this.printer.state();
-			if (printerState.state !== 'idle') {
-				reject(`Cannot print, print state is ${printerState.state}`);
-				return;
-			}
+	async sendGCode (gcode) {
+		const printerState = await this.printer.state();
+		if (printerState.state !== 'idle') {
+			throw `Cannot print, print state is ${printerState.state}`;
+		}
 
-			let autoUpdateState = this.autoUpdate;
-			this.autoUpdate = false;
+		const autoUpdateState = this.autoUpdate;
+		this.autoUpdate = false;
 
-			if (!gcode.endsWith('\n')) {
-				gcode += '\n';
-			}
+		if (!gcode.endsWith('\n')) {
+			gcode += '\n';
+		}
 
-			this._currentBatch = 0;
+		this._currentBatch = 0;
 
-			let lastIndex = 0;
-			let start = true;
-			while (lastIndex !== gcode.length) {
-				let lastIndex = lastIndex + this.maxBatchSize;
-				let index = gcode.lastIndexOf('\n', lastIndex);
-				let batch = gcode.substring(lastIndex, index);
+		let lastIndex = 0;
+		let start = true;
+		while (lastIndex !== gcode.length) {
+			const index = gcode.lastIndexOf('\n', lastIndex + this.maxBatchSize);
+			const batch = gcode.substring(lastIndex, index);
 
-				let progress = await this.printer.progress();
+			// const progress = await this.printer.progress();
 
-				await this._sendBatch(batch, start);
+			await this._sendBatch(batch, start);
 
-				start = false;
-				lastIndex = index + 1; //skip next \n
-			}
+			start = false;
+			lastIndex = index + 1; //skip next \n
+		}
 
-			this.autoUpdate = autoUpdateState;
-
-			resolve();
-		});
+		this.autoUpdate = autoUpdateState;
 	}
 
 	async _update () {
@@ -113,12 +97,8 @@ export default class extends EventDispatcher {
 			try {
 				this.state = await this.info.status();
 
-				this.dispatchEvent({
-					type: 'update', 
-					state: this.state
-				});
-			}
-			catch (error) {
+				this.dispatchEvent({ type: 'update', state: this.state });
+			} catch(error) {
 				await this.checkAlive();
 			}
 
@@ -126,21 +106,16 @@ export default class extends EventDispatcher {
 		}
 	}
 
-	_sendBatch (gcode, start) {
-		return new Promise (async (resolve, reject) => {
-			try {
-				let response = await this.printer.print(gcode, start, start);
-				// maybe do something with failing response
+	async _sendBatch (gcode, start) {
+		try {
+			const response = await this.printer.print(gcode, start, start);
+			// maybe do something with failing response
 
-				console.log(`batch sent: ${index}`, printRequest);
-			}
-			catch (error) {
-				await sleep(1000);
+			console.log(`batch sent: ${index}`, printRequest);
+		} catch(error) {
+			await sleep(1000);
 
-				await this._sendBatch(gcode, index);
-			}
-
-			resolve();
-		});
+			await this._sendBatch(gcode, index);
+		}
 	}
 }
