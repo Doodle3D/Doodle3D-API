@@ -26,20 +26,13 @@ export default class {
 	}
 
 	print (gcode = '', first = false, start = false, last) {
-		let data = {
-			gcode, 
-			first, 
-			start, 
-			last
-		};
+		const data = { gcode, first, start, last };
 
 		return rest.post(`${this.api}printer/print`, data);
 	}
 
 	stop (gcode = '') {
-		let data = {
-			gcode
-		};
+		const data = { gcode };
 
 		return rest.post(`${this.api}printer/stop`, data);
 	}

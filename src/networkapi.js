@@ -18,11 +18,7 @@ export default class {
 	}
 
 	assosiate (ssid, phrase, recreate = false) {
-		var data = {
-			ssid, 
-			recreate, 
-			phrase
-		};
+		const data = { ssid, recreate, phrase };
 
 		return rest.post(`${this.api}network/associate`, data);
 	}

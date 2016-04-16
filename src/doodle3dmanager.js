@@ -102,20 +102,14 @@ export default class Doodle3DManager extends EventDispatcher {
 	_addBox (box) {
 		this.boxes.push(box);
 
-		this.dispatchEvent({
-			type: 'boxappeared', 
-			box
-		});
+		this.dispatchEvent({ type: 'boxappeared', box });
 	}
 
 	_removeBox (box) {
 		let index = this.boxes.indexOf(box);
 		if (index !== -1) {
 			this.boxes.splice(index, 1);
-			this.dispatchEvent({
-				type: 'boxdisappeared', 
-				box
-			});
+			this.dispatchEvent({ type: 'boxdisappeared', box });
 		}
 	}
 }
