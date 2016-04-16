@@ -106,7 +106,7 @@ export default class Doodle3DManager extends EventDispatcher {
 	}
 
 	_removeBox (box) {
-		let index = this.boxes.indexOf(box);
+		const index = this.boxes.indexOf(box);
 		if (index !== -1) {
 			this.boxes.splice(index, 1);
 			this.dispatchEvent({ type: 'boxdisappeared', box });
