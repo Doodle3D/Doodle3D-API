@@ -66,14 +66,9 @@ export default class extends EventDispatcher {
 			throw `Cannot print, print state is ${printerState.state}`;
 		}
 
-		const autoUpdateState = this.autoUpdate;
-		this.autoUpdate = false;
-
 		if (!gcode.endsWith('\n')) {
 			gcode += '\n';
 		}
-
-		this._currentBatch = 0;
 
 		let lastIndex = 0;
 		let start = true;
@@ -88,8 +83,6 @@ export default class extends EventDispatcher {
 			start = false;
 			lastIndex = index + 1; //skip next \n
 		}
-
-		this.autoUpdate = autoUpdateState;
 	}
 
 	async _update () {
