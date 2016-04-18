@@ -10,10 +10,10 @@ const queue = [];
 export function get (url) {
 	return new Promise((resolve, reject) => {
 		$.ajax({
-			url: url, 
-			dataType: 'json', 
-			timeout: GET_TIMEOUT, 
+			url: url,
 			type: 'GET',
+			dataType: 'json',
+			timeout: GET_TIMEOUT,
 			success: (response) => {
 				if (response.status === 'success') {
 					resolve(response.data, response.msg);
@@ -29,11 +29,11 @@ export function get (url) {
 export function post (url, data) {
 	return new Promise((resolve, reject) => {
 		$.ajax({
-			url: url, 
-			type: 'POST', 
-			data: data, 
-			dataType: 'json', 
-			timeout: POST_TIMEOUT, 
+			url: url,
+			type: 'POST',
+			data: data,
+			dataType: 'json',
+			timeout: POST_TIMEOUT,
 			success: (response) => {
 				if (response.status === 'success') {
 					resolve(response.data);
@@ -76,8 +76,8 @@ export function post (url, data) {
 	return new Promise((resolve, reject) => {
 
 		fetch(url, {
-			method: 'post', 
-			enctype: 'x-www-form-urlencoded', 
+			method: 'post',
+			enctype: 'x-www-form-urlencoded',
 			headers: {
 				'Accept': 'application/json'
 			},
