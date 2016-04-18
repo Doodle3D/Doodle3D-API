@@ -13,6 +13,7 @@ export function get (url) {
 			url: url, 
 			dataType: 'json', 
 			timeout: GET_TIMEOUT, 
+			type: 'GET',
 			success: (response) => {
 				if (response.status === 'success') {
 					resolve(response.data, response.msg);
