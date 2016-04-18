@@ -8,32 +8,19 @@ const POST_TIMEOUT = 10000;
 const queue = [];
 
 export function get (url) {
-	return new Promise((resolve, reject) => {
-		$.ajax({
-			url: url,
-			type: 'GET',
-			dataType: 'json',
-			timeout: GET_TIMEOUT,
-			success: (response) => {
-				if (response.status === 'success') {
-					resolve(response.data, response.msg);
-				}
-				else {
-					reject(response.msg);
-				}
-			}
-		}).fail(reject);
-	});
+	return await ajax(url, 'GET');
 }
 
 export function post (url, data) {
+	return await ajax(url, 'POST', data);
+}
+
+function ajax(url, type, data) {
+	const timeout = (type === 'GET') ? GET_TIMEOUT : POST_TIMEOUT;
+
 	return new Promise((resolve, reject) => {
 		$.ajax({
-			url: url,
-			type: 'POST',
-			data: data,
-			dataType: 'json',
-			timeout: POST_TIMEOUT,
+			url, type, data, timeout, dataType: 'json',
 			success: (response) => {
 				if (response.status === 'success') {
 					resolve(response.data);
