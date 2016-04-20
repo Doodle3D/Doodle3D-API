@@ -6,16 +6,48 @@ const POST_TIMEOUT = 10000;
 // TODO
 // implement queue meganism
 const queue = [];
+let sending = false;
 
 export function get (url) {
-	return await ajax(url, 'GET');
+	return new Promise((resolve, reject) => {
+		addQue({ url, type: 'GET', resolve, reject });
+	});
 }
 
 export function post (url, data) {
-	return await ajax(url, 'POST', data);
+	return new Promise((resolve, reject) => {
+		addQue({ url, type: 'POST', data, resolve, reject });
+	});
 }
 
-function ajax(url, type, data) {
+function addQue(ajaxData) {
+	if (sending) {
+		sendQueue(ajaxData);
+	} else {
+		queue.push(ajaxData);
+	}
+}
+
+async function sendQueue() {
+	sending = true;
+
+	const ajaxData = queue.unshift();
+	try {
+		const response = await send(ajaxData);
+	} catch (e) {
+		throw ajaxData.reject(e);
+	}
+
+	ajaxData.resolve(response);
+
+	if (queue.length > 0) {
+		sendQueue();
+	} else {
+		sending = false;
+	}
+}
+
+function send({ url, type, data }) {
 	const timeout = (type === 'GET') ? GET_TIMEOUT : POST_TIMEOUT;
 
 	return new Promise((resolve, reject) => {
