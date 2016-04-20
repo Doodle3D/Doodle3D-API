@@ -3,8 +3,6 @@ import $ from 'jquery';
 const GET_TIMEOUT = 5000;
 const POST_TIMEOUT = 10000;
 
-// TODO
-// implement queue meganism
 const queue = [];
 let sending = false;
 
