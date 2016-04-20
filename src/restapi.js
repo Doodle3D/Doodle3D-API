@@ -22,9 +22,9 @@ export function post (url, data) {
 
 function addQueue(ajaxData) {
 	if (sending) {
-		sendQueue(ajaxData);
-	} else {
 		queue.push(ajaxData);
+	} else {
+		sendQueue(ajaxData);
 	}
 }
 
