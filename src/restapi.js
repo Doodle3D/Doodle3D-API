@@ -10,17 +10,17 @@ let sending = false;
 
 export function get (url) {
 	return new Promise((resolve, reject) => {
-		addQue({ url, type: 'GET', resolve, reject });
+		addQueue({ url, type: 'GET', resolve, reject });
 	});
 }
 
 export function post (url, data) {
 	return new Promise((resolve, reject) => {
-		addQue({ url, type: 'POST', data, resolve, reject });
+		addQueue({ url, type: 'POST', data, resolve, reject });
 	});
 }
 
-function addQue(ajaxData) {
+function addQueue(ajaxData) {
 	if (sending) {
 		sendQueue(ajaxData);
 	} else {
