@@ -1,4 +1,4 @@
-import * as rest from './restapi.js';
+import * as rest from '../rest.js';
 
 export default class {
 	constructor (api) {

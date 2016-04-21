@@ -1,4 +1,4 @@
-import * as rest from './restapi.js';
+import * as rest from './rest.js';
 import Doodle3DBox from './doodle3dbox.js';
 import EventDispatcher from 'casperlamboo/EventDispatcher';
 import { sleep } from './utils.js';
