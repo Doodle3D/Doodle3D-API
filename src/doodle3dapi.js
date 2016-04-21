@@ -81,11 +81,15 @@ export default class extends EventDispatcher {
 
 	async _update () {
 		while (this.autoUpdate) {
-			try {
-				this.state = await this.info.status();
+			if (this.alive) {
+				try {
+					this.state = await this.info.status();
 
-				this.dispatchEvent({ type: 'update', state: this.state });
-			} catch(error) {
+					this.dispatchEvent({ type: 'update', state: this.state });
+				} catch(error) {
+					await this.checkAlive();
+				}
+			} else {
 				await this.checkAlive();
 			}
 
