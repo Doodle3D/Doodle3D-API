@@ -58,14 +58,22 @@ export default class Doodle3DManager extends EventDispatcher {
 		const newBoxes = boxes.filter(box => knownIPsClient.indexOf(box.localip) === -1);
 		const removedBoxes = this.boxes.filter(box => knownIPsServer.indexOf(box.boxData.localip) === -1);
 
+		let changed = false;
 		for (const boxData of newBoxes) {
 			const box = new Doodle3DAPI(boxData);
-
 			this._addBox(box);
+
+			changed = true;
 		}
 
 		for (const box of removedBoxes) {
 			this._removeBox(box);
+
+			changed = true;
+		}
+
+		if (changed) {
+			this.dispatchEvent({ type: 'boxeschanged', boxes: this.boxes });
 		}
 	}
 
