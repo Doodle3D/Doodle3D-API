@@ -6,18 +6,18 @@ export default class {
 	}
 
 	get () {
-		return rest.get(`${this.api}info`);
+		return rest.get(`${ this.api }info`);
 	}
 
 	status () {
-		return rest.get(`${this.api}info/status`);
+		return rest.get(`${ this.api }info/status`);
 	}
 
 	downloadLogFiles () {
-		window.location = `${this.api}info/logfiles`;
+		window.location = `${ this.api }info/logfiles`;
 	}
 
 	acces () {
-		return rest.get(`${this.api}info/access`);
+		return rest.get(`${ this.api }info/access`);
 	}
 }

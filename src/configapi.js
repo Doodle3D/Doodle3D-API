@@ -6,14 +6,14 @@ export default class {
 	}
 
 	get (...keys) {
-		return rest.get(`${this.api}config/?${keys.join('=&')}=`);
+		return rest.get(`${ this.api }config/?${ keys.join('=&') }=`);
 	}
 
 	getAll () {
-		return rest.get(`${this.api}config/all`);
+		return rest.get(`${ this.api }config/all`);
 	}
 
 	set (data) {
-		return rest.post(`${this.api}config`, data);
+		return rest.post(`${ this.api }config`, data);
 	}
 }

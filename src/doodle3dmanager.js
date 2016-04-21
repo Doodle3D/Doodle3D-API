@@ -1,7 +1,7 @@
 import * as rest from './restapi.js';
 import Doodle3DAPI from './doodle3dapi.js';
 import EventDispatcher from 'casperlamboo/EventDispatcher';
-import {sleep} from './utils.js';
+import { sleep } from './utils.js';
 
 export default class Doodle3DManager extends EventDispatcher {
 	constructor () {
@@ -44,7 +44,7 @@ export default class Doodle3DManager extends EventDispatcher {
 	async _checkNew () {
 		let boxes;
 		try {
-			boxes = await rest.get(`${this.api}list.php`);
+			boxes = await rest.get(`${ this.api }list.php`);
 		} catch(error) {
 			console.warn('fail connecting to Doodle3D server');
 			return;

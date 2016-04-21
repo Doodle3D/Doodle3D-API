@@ -6,20 +6,18 @@ export default class {
 	}
 
 	getSketch (id) {
-		return rest.get(`${this.api}sketch/?id=${id}`);
+		return rest.get(`${ this.api }sketch/?id=${ id }`);
 	}
 
 	set (data = '') {
-		return rest.post(`${this.api}sketch`, {
-			data
-		});
+		return rest.post(`${ this.api }sketch`, { data });
 	}
 
 	status () {
-		return rest.get(`${this.api}sketch/status`);
+		return rest.get(`${ this.api }sketch/status`);
 	}
 
 	clear () {
-		return rest.post(`${this.api}sketch/clear`);
+		return rest.post(`${ this.api }sketch/clear`);
 	}
 }

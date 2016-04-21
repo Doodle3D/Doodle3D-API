@@ -6,34 +6,34 @@ export default class {
 	}
 
 	temperature () {
-		return rest.get(`${this.api}printer/temperature`);
+		return rest.get(`${ this.api }printer/temperature`);
 	}
 
 	progress () {
-		return rest.get(`${this.api}printer/progress`);
+		return rest.get(`${ this.api }printer/progress`);
 	}
 
 	state () {
-		return rest.get(`${this.api}printer/state`);
+		return rest.get(`${ this.api }printer/state`);
 	}
 
 	listAll () {
-		return rest.get(`${this.api}printer/listall`);
+		return rest.get(`${ this.api }printer/listall`);
 	}
 
 	heatup () {
-		return rest.post(`${this.api}printer/heatup`, {});
+		return rest.post(`${ this.api }printer/heatup`, {});
 	}
 
 	print (gcode = '', first = false, start = false, last) {
 		const data = { gcode, first, start, last };
 
-		return rest.post(`${this.api}printer/print`, data);
+		return rest.post(`${ this.api }printer/print`, data);
 	}
 
 	stop (gcode = '') {
 		const data = { gcode };
 
-		return rest.post(`${this.api}printer/stop`, data);
+		return rest.post(`${ this.api }printer/stop`, data);
 	}
 }

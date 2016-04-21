@@ -6,7 +6,7 @@ import PrinterAPI from './printerapi.js';
 import SketchAPI from './sketchapi.js';
 import SystemAPI from './systemapi.js';
 import UpdateAPI from './updateapi.js';
-import {sleep} from './utils.js';
+import { sleep } from './utils.js';
 
 export default class extends EventDispatcher {
 	constructor (boxData) {
@@ -14,13 +14,13 @@ export default class extends EventDispatcher {
 
 		this.boxData = boxData;
 
-		this.api = `http://${boxData.localip}/d3dapi/`;
+		this.api = `http://${ boxData.localip }/d3dapi/`;
 
 		this.alive = false;
 		this.autoUpdate = false;
 		this.state = {};
 
-		this.maxBatchSize = 10*1024;
+		this.maxBatchSize = 10 * 1024;
 		this.fullBufferTimeout = 10000;
 
 		this.config = new ConfigAPI(this.api);
@@ -57,7 +57,7 @@ export default class extends EventDispatcher {
 	async sendGCode (gcode) {
 		const printerState = await this.printer.state();
 		if (printerState.state !== 'idle') {
-			throw `Cannot print, print state is ${printerState.state}`;
+			throw `Cannot print, print state is ${ printerState.state }`;
 		}
 
 		if (!gcode.endsWith('\n')) {
@@ -98,7 +98,7 @@ export default class extends EventDispatcher {
 			const response = await this.printer.print(gcode, start, start);
 			// maybe do something with failing response
 
-			console.log(`batch sent: ${index}`, printRequest);
+			console.log(`batch sent: ${ index }`, printRequest);
 		} catch(error) {
 			await sleep(1000);
 

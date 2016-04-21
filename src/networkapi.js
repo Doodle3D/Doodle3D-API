@@ -6,48 +6,48 @@ export default class {
 	}
 
 	scan () {
-		return rest.get(`${this.api}network/scan`);
+		return rest.get(`${ this.api }network/scan`);
 	}
 
 	known () {
-		return rest.get(`${this.api}network/known`);
+		return rest.get(`${ this.api }network/known`);
 	}
 
 	status () {
-		return rest.get(`${this.api}network/status`);
+		return rest.get(`${ this.api }network/status`);
 	}
 
 	assosiate (ssid, phrase, recreate = false) {
 		const data = { ssid, recreate, phrase };
 
-		return rest.post(`${this.api}network/associate`, data);
+		return rest.post(`${ this.api }network/associate`, data);
 	}
 
 	disassociate () {
 		//not tested
 
-		return rest.post(`${this.api}network/disassociate`, {});
+		return rest.post(`${ this.api }network/disassociate`, {});
 	}
 
 	openAccesPoint () {
 		//not tested
 
-		return rest.post(`${this.api}network/openap`, {});
+		return rest.post(`${ this.api }network/openap`, {});
 	}
 
 	remove (ssid) {
-		return rest.post(`${this.api}network/remove`, {
+		return rest.post(`${ this.api }network/remove`, {
 			'ssid': ssid
 		});
 	}
 
 	signin () {
-		return rest.get(`${this.api}network/signin`);
+		return rest.get(`${ this.api }network/signin`);
 	}
 
 	async alive () {
 		try {
-			await rest.get(`${this.api}network/alive`);
+			await rest.get(`${ this.api }network/alive`);
 
 			return true;
 		} catch(error) {
