@@ -1,14 +1,14 @@
 import EventDispatcher from 'casperlamboo/EventDispatcher';
-import ConfigAPI from './configapi.js';
-import InfoAPI from './infoapi.js';
-import NetworkAPI from './networkapi.js';
-import PrinterAPI from './printerapi.js';
-import SketchAPI from './sketchapi.js';
-import SystemAPI from './systemapi.js';
-import UpdateAPI from './updateapi.js';
 import { sleep } from './utils.js';
+import ConfigAPI from './api/config.js';
+import InfoAPI from './api/info.js';
+import NetworkAPI from './api/network.js';
+import PrinterAPI from './api/printer.js';
+import SketchAPI from './api/sketch.js';
+import SystemAPI from './api/system.js';
+import UpdateAPI from './api/update.js';
 
-export default class extends EventDispatcher {
+export default class Doodle3DBox extends EventDispatcher {
 	constructor (boxData) {
 		super();
 

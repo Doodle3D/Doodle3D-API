@@ -1,5 +1,5 @@
 import * as rest from './restapi.js';
-import Doodle3DAPI from './doodle3dapi.js';
+import Doodle3DBox from './doodle3dbox.js';
 import EventDispatcher from 'casperlamboo/EventDispatcher';
 import { sleep } from './utils.js';
 
@@ -60,7 +60,7 @@ export default class Doodle3DManager extends EventDispatcher {
 
 		let changed = false;
 		for (const boxData of newBoxes) {
-			const box = new Doodle3DAPI(boxData);
+			const box = new Doodle3DBox(boxData);
 			this._addBox(box);
 
 			changed = true;
