@@ -18,7 +18,7 @@ export default class Doodle3DManager extends EventDispatcher {
 			wifiboxid: 'Node JS Server',
 			localip: '127.0.0.1:3000'
 		}*/];
-		this.checkNonServerBoxes = true;
+		this.checkNonServerBoxes = false;
 
 		this.autoUpdate = false;
 	}
