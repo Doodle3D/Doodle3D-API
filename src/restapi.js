@@ -3,49 +3,15 @@ import $ from 'jquery';
 const GET_TIMEOUT = 5000;
 const POST_TIMEOUT = 10000;
 
-const queue = [];
-let sending = false;
-
 export function get (url) {
-	return new Promise((resolve, reject) => {
-		addQueue({ url, type: 'GET', resolve, reject });
-	});
+	return send(url, 'GET');
 }
 
 export function post (url, data) {
-	return new Promise((resolve, reject) => {
-		addQueue({ url, type: 'POST', data, resolve, reject });
-	});
+	return send(url, 'POST', data);
 }
 
-function addQueue(ajaxData) {
-	if (sending) {
-		queue.push(ajaxData);
-	} else {
-		sendQueue(ajaxData);
-	}
-}
-
-async function sendQueue() {
-	sending = true;
-
-	const ajaxData = queue.unshift();
-	try {
-		const response = await send(ajaxData);
-	} catch (e) {
-		throw ajaxData.reject(e);
-	}
-
-	ajaxData.resolve(response);
-
-	if (queue.length > 0) {
-		sendQueue();
-	} else {
-		sending = false;
-	}
-}
-
-function send({ url, type, data }) {
+function send(url, type, data) {
 	const timeout = (type === 'GET') ? GET_TIMEOUT : POST_TIMEOUT;
 
 	return new Promise((resolve, reject) => {
