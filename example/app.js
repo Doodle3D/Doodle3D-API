@@ -4,7 +4,7 @@ const doodle3DManager = new Doodle3DManager();
 doodle3DManager.setAutoUpdate(true, 1000);
 
 doodle3DManager.addEventListener('boxappeared', ({ box }) => {
-	box.setAutoUpdate(true);
+	box.setAutoUpdate(true, 1000);
 
 	box.addEventListener('connect', () => {
 		console.log('connect to box', box);
