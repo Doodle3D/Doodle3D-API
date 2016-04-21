@@ -25,36 +25,19 @@ export default class Doodle3DManager extends EventDispatcher {
 
 	setAutoUpdate (autoUpdate = true, updateInterval = 1000) {
 		this.updateInterval = updateInterval;
-
-		if (this.autoUpdate === autoUpdate) {
-			return;
-		}
+		if (this.autoUpdate === autoUpdate) return;
 
 		this.autoUpdate = autoUpdate;
-
-		if (autoUpdate) {
-			this._update();
-		}
+		if (autoUpdate) this._update();
 
 		return this;
 	}
 
 	async _update () {
 		while (this.autoUpdate) {
-			await this._checkAlive();
 			await this._checkNew();
 
 			await sleep(this.updateInterval);
-		}
-	}
-
-	async _checkAlive () {
-		for (const box of boxes) {
-			const alive = await box.checkAlive();
-
-			if (!alive) {
-				this._removeBox(box);
-			}
 		}
 	}
 
@@ -63,23 +46,26 @@ export default class Doodle3DManager extends EventDispatcher {
 		try {
 			boxes = await rest.get(`${this.api}list.php`);
 		} catch(error) {
-			throw 'fail connecting to Doodle3D server';
+			console.warn('fail connecting to Doodle3D server');
+			return;
 		}
 
-		if (this.checkNonServerBoxes) {
-			boxes = [...boxes, ...this.nonServerBoxes];
-		}
+		if (this.checkNonServerBoxes) boxes = boxes.concat(this.nonServerBoxes);
 
-		const knownIPs = this.boxes.map((box) => box.boxData.localip);
-		const boxes = boxes.filter(({ localip }) => knownIPs.indexOf(localip) === -1);
+		const knownIPsClient = this.boxes.map(box => box.boxData.localip);
+		const knownIPsServer = boxes.map(box => box.localip);
 
-		for (const boxData of boxes) {
+		const newBoxes = boxes.filter(box => knownIPsClient.indexOf(box.localip) === -1);
+		const removedBoxes = this.boxes.filter(box => knownIPsServer.indexOf(box.boxData.localip) === -1);
+
+		for (const boxData of newBoxes) {
 			const box = new Doodle3DAPI(boxData);
 
-			const alive = await box.checkAlive();
-			if (alive) {
-				this._addBox(box);
-			}
+			this._addBox(box);
+		}
+
+		for (const box of removedBoxes) {
+			this._removeBox(box);
 		}
 	}
 
