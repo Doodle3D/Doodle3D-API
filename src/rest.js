@@ -3,11 +3,11 @@ import $ from 'jquery';
 const GET_TIMEOUT = 5000;
 const POST_TIMEOUT = 10000;
 
-export function get (url) {
+export function get(url) {
 	return send(url, 'GET');
 }
 
-export function post (url, data) {
+export function post(url, data) {
 	return send(url, 'POST', data);
 }
 

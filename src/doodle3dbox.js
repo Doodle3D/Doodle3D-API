@@ -9,7 +9,7 @@ import SystemAPI from './api/system.js';
 import UpdateAPI from './api/update.js';
 
 export default class Doodle3DBox extends EventDispatcher {
-	constructor (boxData) {
+	constructor(boxData) {
 		super();
 
 		this.boxData = boxData;
@@ -31,8 +31,7 @@ export default class Doodle3DBox extends EventDispatcher {
 		this.system = new SystemAPI(this.api);
 		this.update = new UpdateAPI(this.api);
 	}
-
-	setAutoUpdate (autoUpdate = true, updateInterval = 1000) {
+	setAutoUpdate(autoUpdate = true, updateInterval = 1000) {
 		this.updateInterval = updateInterval;
 		if (this.autoUpdate === autoUpdate) return;
 
@@ -41,8 +40,7 @@ export default class Doodle3DBox extends EventDispatcher {
 
 		return this;
 	}
-
-	async checkAlive () {
+	async checkAlive() {
 		const alive = await this.network.alive();
 
 		if (alive !== this.alive) {
@@ -53,8 +51,7 @@ export default class Doodle3DBox extends EventDispatcher {
 		this.alive = alive;
 		return alive;
 	}
-
-	async sendGCode (gcode) {
+	async sendGCode(gcode) {
 		const printerState = await this.printer.state();
 		if (printerState.state !== 'idle') {
 			throw `Cannot print, print state is ${ printerState.state }`;
@@ -78,8 +75,7 @@ export default class Doodle3DBox extends EventDispatcher {
 			lastIndex = index + 1; //skip next \n
 		}
 	}
-
-	async _update () {
+	async _update() {
 		while (this.autoUpdate) {
 			if (this.alive) {
 				try {
@@ -96,8 +92,7 @@ export default class Doodle3DBox extends EventDispatcher {
 			await sleep(this.updateInterval);
 		}
 	}
-
-	async _sendBatch (gcode, start) {
+	async _sendBatch(gcode, start) {
 		try {
 			const response = await this.printer.print(gcode, start, start);
 			// maybe do something with failing response

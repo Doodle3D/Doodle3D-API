@@ -1,19 +1,16 @@
 import * as rest from '../rest.js';
 
-export default class {
-	constructor (api) {
+export default class Config {
+	constructor(api) {
 		this.api = api;
 	}
-
-	get (...keys) {
+	get(...keys) {
 		return rest.get(`${ this.api }config/?${ keys.join('=&') }=`);
 	}
-
-	getAll () {
+	getAll() {
 		return rest.get(`${ this.api }config/all`);
 	}
-
-	set (data) {
+	set(data) {
 		return rest.post(`${ this.api }config`, data);
 	}
 }

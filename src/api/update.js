@@ -1,29 +1,22 @@
 import * as rest from '../rest.js';
 
-export default class {
-	constructor (api) {
+export default class Update {
+	constructor(api) {
 		this.api = api;
 	}
-
-	status () {
+	status() {
 		return rest.get(`${ this.api }update/status`);
 	}
-
-	download () {
+	download() {
 		//not tested
-
 		return rest.post(`${ this.api }update/download`, {});
 	}
-
-	install () {
+	install() {
 		//not tested
-
 		return rest.post(`${ this.api }update/install`, {});
 	}
-
-	clear () {
+	clear() {
 		//not tested
-
 		return rest.post(`${ this.api }update/clear`, {});
 	}
 }

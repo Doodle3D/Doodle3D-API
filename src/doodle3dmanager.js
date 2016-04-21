@@ -4,7 +4,7 @@ import EventDispatcher from 'casperlamboo/EventDispatcher';
 import { sleep } from './utils.js';
 
 export default class Doodle3DManager extends EventDispatcher {
-	constructor () {
+	constructor() {
 		super();
 
 		this.api = 'http://connect.doodle3d.com/api/';
@@ -22,8 +22,7 @@ export default class Doodle3DManager extends EventDispatcher {
 
 		this.autoUpdate = false;
 	}
-
-	setAutoUpdate (autoUpdate = true, updateInterval = 1000) {
+	setAutoUpdate(autoUpdate = true, updateInterval = 1000) {
 		this.updateInterval = updateInterval;
 		if (this.autoUpdate === autoUpdate) return;
 
@@ -32,16 +31,14 @@ export default class Doodle3DManager extends EventDispatcher {
 
 		return this;
 	}
-
-	async _update () {
+	async _update() {
 		while (this.autoUpdate) {
 			await this._checkNew();
 
 			await sleep(this.updateInterval);
 		}
 	}
-
-	async _checkNew () {
+	async _checkNew() {
 		let boxes;
 		try {
 			boxes = await rest.get(`${ this.api }list.php`);
@@ -76,14 +73,12 @@ export default class Doodle3DManager extends EventDispatcher {
 			this.dispatchEvent({ type: 'boxeschanged', boxes: this.boxes });
 		}
 	}
-
-	_addBox (box) {
+	_addBox(box) {
 		this.boxes.push(box);
 
 		this.dispatchEvent({ type: 'boxappeared', box });
 	}
-
-	_removeBox (box) {
+	_removeBox(box) {
 		const index = this.boxes.indexOf(box);
 		if (index !== -1) {
 			this.boxes.splice(index, 1);

@@ -1,11 +1,10 @@
 import * as rest from '../rest.js';
 
-export default class {
-	constructor (api) {
+export default class System {
+	constructor(api) {
 		this.api = api;
 	}
-
-	versions () {
+	versions() {
 		return rest.get(`${ this.api }system/fwversions`);
 	}
 }

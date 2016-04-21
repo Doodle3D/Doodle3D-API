@@ -1,37 +1,30 @@
 import * as rest from '../rest.js';
 
-export default class {
-	constructor (api) {
+export default class Printer {
+	constructor(api) {
 		this.api = api;
 	}
-
-	temperature () {
+	temperature() {
 		return rest.get(`${ this.api }printer/temperature`);
 	}
-
-	progress () {
+	progress() {
 		return rest.get(`${ this.api }printer/progress`);
 	}
-
-	state () {
+	state() {
 		return rest.get(`${ this.api }printer/state`);
 	}
-
-	listAll () {
+	listAll() {
 		return rest.get(`${ this.api }printer/listall`);
 	}
-
-	heatup () {
+	heatup() {
 		return rest.post(`${ this.api }printer/heatup`, {});
 	}
-
-	print (gcode = '', first = false, start = false, last) {
+	print(gcode = '', first = false, start = false, last) {
 		const data = { gcode, first, start, last };
 
 		return rest.post(`${ this.api }printer/print`, data);
 	}
-
-	stop (gcode = '') {
+	stop(gcode = '') {
 		const data = { gcode };
 
 		return rest.post(`${ this.api }printer/stop`, data);

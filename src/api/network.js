@@ -1,51 +1,40 @@
 import * as rest from '../rest.js';
 
-export default class {
-	constructor (api) {
+export default class Network {
+	constructor(api) {
 		this.api = api;
 	}
-
-	scan () {
+	scan() {
 		return rest.get(`${ this.api }network/scan`);
 	}
-
-	known () {
+	known() {
 		return rest.get(`${ this.api }network/known`);
 	}
-
-	status () {
+	status() {
 		return rest.get(`${ this.api }network/status`);
 	}
-
-	assosiate (ssid, phrase, recreate = false) {
+	assosiate(ssid, phrase, recreate = false) {
 		const data = { ssid, recreate, phrase };
 
 		return rest.post(`${ this.api }network/associate`, data);
 	}
-
-	disassociate () {
+	disassociate() {
 		//not tested
-
 		return rest.post(`${ this.api }network/disassociate`, {});
 	}
-
-	openAccesPoint () {
+	openAccesPoint() {
 		//not tested
-
 		return rest.post(`${ this.api }network/openap`, {});
 	}
-
-	remove (ssid) {
+	remove(ssid) {
 		return rest.post(`${ this.api }network/remove`, {
 			'ssid': ssid
 		});
 	}
-
-	signin () {
+	signin() {
 		return rest.get(`${ this.api }network/signin`);
 	}
-
-	async alive () {
+	async alive() {
 		try {
 			await rest.get(`${ this.api }network/alive`);
 

@@ -1,23 +1,19 @@
 import * as rest from '../rest.js';
 
-export default class {
-	constructor (api) {
+export default class Info {
+	constructor(api) {
 		this.api = api;
 	}
-
-	get () {
+	get() {
 		return rest.get(`${ this.api }info`);
 	}
-
-	status () {
+	status() {
 		return rest.get(`${ this.api }info/status`);
 	}
-
-	downloadLogFiles () {
+	downloadLogFiles() {
 		window.location = `${ this.api }info/logfiles`;
 	}
-
-	acces () {
+	acces() {
 		return rest.get(`${ this.api }info/access`);
 	}
 }

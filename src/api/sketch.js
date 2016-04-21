@@ -1,23 +1,19 @@
 import * as rest from '../rest.js';
 
-export default class {
-	constructor (api) {
+export default class Sketch {
+	constructor(api) {
 		this.api = api;
 	}
-
-	getSketch (id) {
+	getSketch(id) {
 		return rest.get(`${ this.api }sketch/?id=${ id }`);
 	}
-
-	set (data = '') {
+	set(data = '') {
 		return rest.post(`${ this.api }sketch`, { data });
 	}
-
-	status () {
+	status() {
 		return rest.get(`${ this.api }sketch/status`);
 	}
-
-	clear () {
+	clear() {
 		return rest.post(`${ this.api }sketch/clear`);
 	}
 }
