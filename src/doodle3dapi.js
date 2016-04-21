@@ -34,16 +34,10 @@ export default class extends EventDispatcher {
 
 	setAutoUpdate (autoUpdate = true, updateInterval = 1000) {
 		this.updateInterval = updateInterval;
-
-		if (this.autoUpdate === autoUpdate) {
-			return;
-		}
+		if (this.autoUpdate === autoUpdate) return;
 
 		this.autoUpdate = autoUpdate;
-
-		if (autoUpdate) {
-			this._update();
-		}
+		if (autoUpdate) this._update();
 
 		return this;
 	}
