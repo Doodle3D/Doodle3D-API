@@ -97,8 +97,10 @@ export default class Doodle3DBox extends EventDispatcher {
       const response = await this.printer.print(gcode, start, start);
       // maybe do something with failing response
 
-      console.log(`batch sent: ${ index }`, printRequest);
+      console.log(`batch sent: ${ index }`);
     } catch(error) {
+      console.log(`failed sending batch: ${ index }`);
+
       await sleep(1000);
 
       await this._sendBatch(gcode, index);
