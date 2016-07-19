@@ -12,7 +12,7 @@ doodle3DManager.addEventListener('boxappeared', ({ box }) => {
 
   box.addEventListener('disconnect', () => {
     console.log('disonnect to box', box);
-  })
+  });
 
   box.addEventListener('update', ({ state }) => {
     console.log(state);
