@@ -43,7 +43,7 @@ SystemJS.config({
     "github:*/*.json"
   ],
   map: {
-    "casperlamboo/EventDispatcher": "github:casperlamboo/EventDispatcher@master",
+    "EventDispatcher": "github:mrdoob/eventdispatcher.js@1.0.0",
     "github/fetch": "github:github/fetch@0.9.0",
     "jquery": "github:components/jquery@2.2.4"
   },

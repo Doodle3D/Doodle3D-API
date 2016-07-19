@@ -1,6 +1,6 @@
 import * as rest from './rest.js';
 import Doodle3DBox from './doodle3dbox.js';
-import EventDispatcher from 'casperlamboo/EventDispatcher';
+import EventDispatcher from 'EventDispatcher';
 import { sleep } from './utils.js';
 
 export default class Doodle3DManager extends EventDispatcher {

@@ -1,4 +1,4 @@
-import EventDispatcher from 'casperlamboo/EventDispatcher';
+import EventDispatcher from 'EventDispatcher';
 import { sleep } from './utils.js';
 import ConfigAPI from './api/config.js';
 import InfoAPI from './api/info.js';
