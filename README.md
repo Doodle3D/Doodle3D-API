@@ -2,18 +2,24 @@
 Doodle3D API for communication with the Doodle3D WiFi-Box
 
 ```javascript
-import Doodle3DAPI from 'doodle3dapi';
+import { Doodle3DManager } from 'Doodle3D/Doodle3D-API';
 
-var localIP = "192.168.5.1";
-var doodle3DAPI = new Doodle3DAPI(localIP);
-doodle3DAPI.onconnect = function () {
+const doodle3DManager = new Doodle3DManager();
 
-};
-doodle3DAPI.ondisconnect = function () {
+doodle3DManager.addEventListener('boxappeared', ({box}) => {
+  box.addEventListener('connect', (event) => {
+  });
 
-};
-doodle3DAPI.onupdate = function (data) {
+  box.addEventListener('disconnect', (event) => {
+  });
 
-};
-doodle3DAPI.startUpdateLoop();
+  box.addEventListener('update', (event) => {
+    const status = event.state;
+  });
+
+  box.setAutoUpdate(true, 1000);
+});
+
+doodle3DManager.setAutoUpdate(true, 1000);
+
 ```
