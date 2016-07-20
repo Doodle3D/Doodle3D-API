@@ -20,13 +20,9 @@ export default class Printer {
     return rest.post(`${ this.api }printer/heatup`, {});
   }
   print(gcode = '', first = false, start = false, last) {
-    const data = { gcode, first, start, last };
-
-    return rest.post(`${ this.api }printer/print`, data);
+    return rest.post(`${ this.api }printer/print`, { gcode, first, start, last });
   }
   stop(gcode = '') {
-    const data = { gcode };
-
-    return rest.post(`${ this.api }printer/stop`, data);
+    return rest.post(`${ this.api }printer/stop`, { gcode });
   }
 }
