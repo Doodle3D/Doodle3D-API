@@ -69,7 +69,7 @@ export default class Doodle3DBox extends EventDispatcher {
 
       // const progress = await this.printer.progress();
 
-      await this._sendBatch(batch, start);
+      await this._sendBatch(batch, start, index);
 
       start = false;
       lastIndex = index + 1; //skip next \n
@@ -92,7 +92,7 @@ export default class Doodle3DBox extends EventDispatcher {
       await sleep(this.updateInterval);
     }
   }
-  async _sendBatch(gcode, start) {
+  async _sendBatch(gcode, start, index) {
     try {
       const response = await this.printer.print(gcode, start, start);
       // maybe do something with failing response
