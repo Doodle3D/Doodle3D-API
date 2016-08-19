@@ -24,7 +24,7 @@ export default class Doodle3DManager extends EventDispatcher {
   }
   setAutoUpdate(autoUpdate = true, updateInterval = 1000) {
     this.updateInterval = updateInterval;
-    if (this.autoUpdate === autoUpdate) return;
+    if (this.autoUpdate === autoUpdate) return this;
 
     this.autoUpdate = autoUpdate;
     if (autoUpdate) this._update();
