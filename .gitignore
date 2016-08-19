@@ -1,6 +1,7 @@
 
 jspm_packages/*
 example/test.gcode
+node_modules/*
 
 build.js
 
