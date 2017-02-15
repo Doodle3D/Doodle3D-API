@@ -20,13 +20,22 @@ export default class Printer {
     return rest.post(`${ this.api }printer/heatup`, {});
   }
   print(gcode = '', first = false, start = false, last) {
-    const data = { gcode, first, start, last };
-
-    return rest.post(`${ this.api }printer/print`, data);
+    return rest.post(`${ this.api }printer/print`, { gcode, first, start, last });
   }
   stop(gcode = '') {
-    const data = { gcode };
+    return rest.post(`${ this.api }printer/stop`, { gcode });
+  }
+  async _sendBatch(gcode, start, index) {
+    try {
+      const response = await this.print(gcode, start, start);
 
-    return rest.post(`${ this.api }printer/stop`, data);
+      console.log(`batch sent: ${ index }`);
+    } catch(error) {
+      console.log(`failed sending batch: ${ index }`);
+
+      await sleep(1000);
+
+      await this._sendBatch(gcode, index);
+    }
   }
 }

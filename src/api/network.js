@@ -14,9 +14,7 @@ export default class Network {
     return rest.get(`${ this.api }network/status`);
   }
   assosiate(ssid, phrase, recreate = false) {
-    const data = { ssid, recreate, phrase };
-
-    return rest.post(`${ this.api }network/associate`, data);
+    return rest.post(`${ this.api }network/associate`, { ssid, phrase, recreate });
   }
   disassociate() {
     //not tested
@@ -27,9 +25,7 @@ export default class Network {
     return rest.post(`${ this.api }network/openap`, {});
   }
   remove(ssid) {
-    return rest.post(`${ this.api }network/remove`, {
-      'ssid': ssid
-    });
+    return rest.post(`${ this.api }network/remove`, { ssid });
   }
   signin() {
     return rest.get(`${ this.api }network/signin`);

@@ -18,13 +18,13 @@ export default class Doodle3DManager extends EventDispatcher {
       wifiboxid: 'Node JS Server',
       localip: '127.0.0.1:3000'
     }*/];
-    this.checkNonServerBoxes = false;
+    this.checkNonServerBoxes = true;
 
     this.autoUpdate = false;
   }
   setAutoUpdate(autoUpdate = true, updateInterval = 1000) {
     this.updateInterval = updateInterval;
-    if (this.autoUpdate === autoUpdate) return;
+    if (this.autoUpdate === autoUpdate) return this;
 
     this.autoUpdate = autoUpdate;
     if (autoUpdate) this._update();
@@ -39,12 +39,11 @@ export default class Doodle3DManager extends EventDispatcher {
     }
   }
   async _checkNew() {
-    let boxes;
+    let boxes = [];
     try {
       boxes = await rest.get(`${ this.api }list.php`);
     } catch(error) {
       console.warn('fail connecting to Doodle3D server');
-      return;
     }
 
     if (this.checkNonServerBoxes) boxes = boxes.concat(this.nonServerBoxes);

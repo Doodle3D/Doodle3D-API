@@ -33,7 +33,7 @@ export default class Doodle3DBox extends EventDispatcher {
   }
   setAutoUpdate(autoUpdate = true, updateInterval = 1000) {
     this.updateInterval = updateInterval;
-    if (this.autoUpdate === autoUpdate) return;
+    if (this.autoUpdate === autoUpdate) return this;
 
     this.autoUpdate = autoUpdate;
     if (autoUpdate) this._update();
@@ -69,7 +69,7 @@ export default class Doodle3DBox extends EventDispatcher {
 
       // const progress = await this.printer.progress();
 
-      await this._sendBatch(batch, start);
+      await this.printer._sendBatch(batch, start, index);
 
       start = false;
       lastIndex = index + 1; //skip next \n
@@ -90,20 +90,6 @@ export default class Doodle3DBox extends EventDispatcher {
       }
 
       await sleep(this.updateInterval);
-    }
-  }
-  async _sendBatch(gcode, start) {
-    try {
-      const response = await this.printer.print(gcode, start, start);
-      // maybe do something with failing response
-
-      console.log(`batch sent: ${ index }`);
-    } catch(error) {
-      console.log(`failed sending batch: ${ index }`);
-
-      await sleep(1000);
-
-      await this._sendBatch(gcode, index);
     }
   }
 }
