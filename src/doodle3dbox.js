@@ -51,6 +51,23 @@ export default class Doodle3DBox extends EventDispatcher {
     this.alive = alive;
     return alive;
   }
+
+  async startLargePrint(gcode) {
+    try {
+      const printerState = await this.printer.state();
+      if (printerState.state !== 'idle') {
+        throw `Cannot print, print state is ${ printerState.state }`;
+      }
+
+      if (!gcode.endsWith('\n')) {
+        gcode += '\n';
+      }
+
+      this.printer.fetch(gcode);
+    } catch (e) {
+      console.log(e);
+    }
+  }
   async sendGCode(gcode) {
     const printerState = await this.printer.state();
     if (printerState.state !== 'idle') {
