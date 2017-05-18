@@ -13,4 +13,7 @@ export default class Config {
   set(data) {
     return rest.post(`${ this.api }config`, data);
   }
+  supportedPrinters() {
+    return rest.get(`${ this.api }config/supportedprinters`);
+  }
 }

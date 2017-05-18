@@ -28,7 +28,6 @@ export default class Printer {
   fetch(gcode = '') {
     rest.post(`https://tranquil-meadow-94621.herokuapp.com/upload`, { gcode })
       .then(response => {
-        console.log(`gcode file id: ${ response }`);
         rest.post(`${ this.api }printer/fetch`, { id: response.id });
       }).catch(err => {
         console.log(err);
