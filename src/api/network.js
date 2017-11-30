@@ -48,7 +48,7 @@ export default class Network {
   }
   async alive() {
     try {
-      await fecth(`${this.api}network/alive`, { method: 'GET' }).then(parseFetch);
+      await fetch(`${this.api}network/alive`, { method: 'GET' }).then(parseFetch);
       return true;
     } catch(error) {
       return false;
