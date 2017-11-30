@@ -1,7 +1,6 @@
-import * as rest from './rest.js';
 import Doodle3DBox from './doodle3dbox.js';
-import EventDispatcher from 'EventDispatcher';
-import { sleep } from './utils.js';
+import EventDispatcher from 'eventdispatcher.js';
+import { sleep, parseFetch } from './utils.js';
 
 export default class Doodle3DManager extends EventDispatcher {
   constructor() {
@@ -41,7 +40,7 @@ export default class Doodle3DManager extends EventDispatcher {
   async _checkNew() {
     let boxes = [];
     try {
-      boxes = await rest.get(`${ this.api }list.php`);
+      boxes = await fetch(`${this.api}list.php`, { method: 'GET' }).then(parseFetch);
     } catch(error) {
       console.warn('fail connecting to Doodle3D server');
     }
