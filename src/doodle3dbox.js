@@ -1,4 +1,4 @@
-import EventDispatcher from 'EventDispatcher';
+import EventDispatcher from 'eventdispatcher.js';
 import { sleep } from './utils.js';
 import ConfigAPI from './api/config.js';
 import InfoAPI from './api/info.js';
@@ -14,7 +14,7 @@ export default class Doodle3DBox extends EventDispatcher {
 
     this.boxData = boxData;
 
-    this.api = `http://${ boxData.localip }/d3dapi/`;
+    this.api = `http://${boxData.localip}/d3dapi/`;
 
     this.alive = false;
     this.autoUpdate = false;
@@ -54,7 +54,7 @@ export default class Doodle3DBox extends EventDispatcher {
   async sendGCode(gcode) {
     const printerState = await this.printer.state();
     if (printerState.state !== 'idle') {
-      throw `Cannot print, print state is ${ printerState.state }`;
+      throw `Cannot print, print state is ${printerState.state}`;
     }
 
     if (!gcode.endsWith('\n')) {

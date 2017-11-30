@@ -1,40 +1,49 @@
-import * as rest from '../rest.js';
+import { parseFetch, sleep } from '../utils.js';
 
 export default class Printer {
   constructor(api) {
     this.api = api;
   }
   temperature() {
-    return rest.get(`${ this.api }printer/temperature`);
+    return fetch(`${this.api}printer/temperature`, { method: 'GET' }).then(parseFetch);
   }
   progress() {
-    return rest.get(`${ this.api }printer/progress`);
+    return fetch(`${this.api}printer/progress`, { method: 'GET' }).then(parseFetch);
   }
   state() {
-    return rest.get(`${ this.api }printer/state`);
+    return fetch(`${this.api}printer/state`, { method: 'GET' }).then(parseFetch);
   }
   listAll() {
-    return rest.get(`${ this.api }printer/listall`);
+    return fetch(`${this.api}printer/listall`, { method: 'GET' }).then(parseFetch);
   }
   heatup() {
-    return rest.post(`${ this.api }printer/heatup`, {});
+    return fetch(`${this.api}printer/heatup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({})
+    }).then(parseFetch);
   }
   print(gcode = '', first = false, start = false, last) {
-    return rest.post(`${ this.api }printer/print`, { gcode, first, start, last });
+    return fetch(`${this.api}printer/print`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ gcode, first, start, last })
+    }).then(parseFetch);
   }
   stop(gcode = '') {
-    return rest.post(`${ this.api }printer/stop`, { gcode });
+    return fetch(`${this.api}printer/stop`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ gcode, first, start, last })
+    }).then(parseFetch);
   }
   async _sendBatch(gcode, start, index) {
     try {
       const response = await this.print(gcode, start, start);
-
-      console.log(`batch sent: ${ index }`);
+      console.log(`batch sent: ${index}`);
     } catch(error) {
-      console.log(`failed sending batch: ${ index }`);
-
+      console.log(`failed sending batch: ${index}`);
       await sleep(1000);
-
       await this._sendBatch(gcode, index);
     }
   }

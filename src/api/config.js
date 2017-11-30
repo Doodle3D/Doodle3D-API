@@ -1,16 +1,20 @@
-import * as rest from '../rest.js';
+import { parseFetch } from '../utils.js';
 
 export default class Config {
   constructor(api) {
     this.api = api;
   }
   get(...keys) {
-    return rest.get(`${ this.api }config/?${ keys.join('=&') }=`);
+    return fetch(`${this.api}config/?${keys.join('=&')}=`, { method: 'GET' }).then(parseFetch);
   }
   getAll() {
-    return rest.get(`${ this.api }config/all`);
+    return fetch(`${this.api}config/all`, { method: 'GET' }).then(parseFetch);
   }
   set(data) {
-    return rest.post(`${ this.api }config`, data);
+    return fetch(`${this.api}config`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(parseFetch);
   }
 }

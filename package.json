@@ -1,57 +1,58 @@
 {
-  "jspm": {
-    "name": "Doodle3D-API",
-    "main": "index.js",
-    "directories": {
-      "lib": "src"
-    },
-    "dependencies": {
-      "EventDispatcher": "github:mrdoob/eventdispatcher.js@^1.0.0",
-      "github/fetch": "github:github/fetch@^0.9.0",
-      "jquery": "github:components/jquery@^2.1.4"
-    },
-    "devDependencies": {
-      "babel-runtime": "npm:babel-runtime@^5.1.13",
-      "core-js": "npm:core-js@^1.2.0",
-      "fs": "github:jspm/nodelibs-fs@^0.2.0-alpha",
-      "path": "github:jspm/nodelibs-path@^0.2.0-alpha",
-      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.12",
-      "process": "github:jspm/nodelibs-process@^0.2.0-alpha",
-      "traceur": "github:jmcriffey/bower-traceur@0.0.90",
-      "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.90"
-    },
-    "overrides": {
-      "github:components/jquery@2.2.4": {
-        "main": "jquery"
-      },
-      "github:jmcriffey/bower-traceur-runtime@0.0.90": {
-        "format": "global",
-        "meta": {
-          "traceur-runtime.js": {
-            "exports": "$traceurRuntime",
-            "format": "global"
-          }
-        }
-      },
-      "github:jmcriffey/bower-traceur@0.0.90": {
-        "format": "global",
-        "meta": {
-          "traceur.js": {
-            "exports": "traceur",
-            "format": "global"
-          }
-        }
-      },
-      "npm:babel-runtime@5.8.38": {
-        "main": false,
-        "dependencies": {},
-        "optionalDependencies": {
-          "core-js": "^1.2.0"
-        }
-      }
-    }
+  "name": "@doodle3d/doodle3d-api",
+  "version": "1.0.0",
+  "description": "Doodle3D API for communication with the Doodle3D WiFi-Box",
+  "main": "lib/index.js",
+  "module": "module/index.js",
+  "esnext": "src/index.js",
+  "scripts": {
+    "start": "webpack-dev-server -w",
+    "prepare": "npm run build",
+    "build": "npm run build:main && npm run build:module",
+    "build:main": "BABEL_ENV=main babel src -s -d lib",
+    "build:module": "BABEL_ENV=module babel src -s -d module"
   },
   "dependencies": {
-    "jspm": "^0.17.0-beta.25"
-  }
+    "eventdispatcher.js": "0.0.2",
+    "whatwg-fetch": "^2.0.3"
+  },
+  "devDependencies": {
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "babel-plugin-inline-import": "^2.0.6",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-es2015-classes": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-cli": "6.24.1",
+    "babel-core": "6.24.1",
+    "babel-loader": "7.0.0",
+    "babel-plugin-add-module-exports": "0.2.1",
+    "babel-preset-es2015": "6.24.1",
+    "babel-polyfill": "^6.23.0",
+    "file-saver": "^1.3.3",
+    "html-webpack-template": "^6.0.2",
+    "imports-loader": "^0.7.1",
+    "material-ui": "^0.19.4",
+    "react-tap-event-plugin": "^3.0.2",
+    "url-loader": "^0.5.9",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "html-webpack-plugin": "^2.29.0",
+    "webpack": "^3.3.0",
+    "webpack-dev-server": "^2.5.1",
+    "worker-loader": "^0.8.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/casperlamboo/Doodle3D-API.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/casperlamboo/Doodle3D-API/issues"
+  },
+  "homepage": "https://github.com/casperlamboo/Doodle3D-API#readme"
 }

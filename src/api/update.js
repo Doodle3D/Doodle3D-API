@@ -1,22 +1,34 @@
-import * as rest from '../rest.js';
+import { parseFetch } from '../utils.js';
 
 export default class Update {
   constructor(api) {
     this.api = api;
   }
   status() {
-    return rest.get(`${ this.api }update/status`);
+    return fetch(`${this.api}update/status`, { method: 'GET' }).then(parseFetch);
   }
   download() {
     //not tested
-    return rest.post(`${ this.api }update/download`, {});
+    return fetch(`${this.api}update/download`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({})
+    }).then(parseFetch);
   }
   install() {
     //not tested
-    return rest.post(`${ this.api }update/install`, {});
+    return fetch(`${this.api}update/install`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({})
+    }).then(parseFetch);
   }
   clear() {
     //not tested
-    return rest.post(`${ this.api }update/clear`, {});
+    return fetch(`${this.api}update/clear`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({})
+    }).then(parseFetch);
   }
 }

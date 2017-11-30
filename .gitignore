@@ -1,8 +1,4 @@
-
-jspm_packages/*
-example/test.gcode
-node_modules/*
-
-build.js
-
-build.js.map
+node_modules
+dist
+lib
+module

@@ -1,19 +1,19 @@
-import * as rest from '../rest.js';
+import { parseFetch } from '../utils.js';
 
 export default class Info {
   constructor(api) {
     this.api = api;
   }
   get() {
-    return rest.get(`${ this.api }info`);
+    return fetch(`${this.api}info`, { method: 'GET' }).then(parseFetch);
   }
   status() {
-    return rest.get(`${ this.api }info/status`);
+    return fetch(`${this.api}info/status`, { method: 'GET' }).then(parseFetch);
   }
   downloadLogFiles() {
-    window.location = `${ this.api }info/logfiles`;
+    window.location = `${this.api}info/logfiles`;
   }
   acces() {
-    return rest.get(`${ this.api }info/access`);
+    return fetch(`${this.api}info/access`, { method: 'GET' }).then(parseFetch);
   }
 }
