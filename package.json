@@ -1,6 +1,6 @@
 {
   "name": "@doodle3d/doodle3d-api",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Doodle3D API for communication with the Doodle3D WiFi-Box",
   "main": "lib/index.js",
   "module": "module/index.js",
