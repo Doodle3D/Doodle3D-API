@@ -14,34 +14,30 @@ export default class Network {
     return fecth(`${this.api}network/status`, { method: 'GET' }).then(parseFetch);
   }
   assosiate(ssid, phrase, recreate = false) {
-    return fetch(`${this.api}network/associate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ssid, phrase, recreate })
-    }).then(parseFetch);
+    const body = new URLSearchParams();
+    body.append('ssid', ssid);
+    body.append('phrase', phrase);
+    body.append('recreate', recreate);
+
+    return fetch(`${this.api}network/associate`, { method: 'POST', body }).then(parseFetch);
   }
   disassociate() {
     //not tested
-    return fetch(`${this.api}network/disassociate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({})
-    }).then(parseFetch);
+    const body = new URLSearchParams();
+
+    return fetch(`${this.api}network/disassociate`, { method: 'POST', body }).then(parseFetch);
   }
   openAccesPoint() {
     //not tested
-    return fetch(`${this.api}network/openap`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({})
-    }).then(parseFetch);
+    const body = new URLSearchParams();
+
+    return fetch(`${this.api}network/openap`, { method: 'POST', body }).then(parseFetch);
   }
   remove(ssid) {
-    return fetch(`${this.api}network/remove`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ssid })
-    }).then(parseFetch);
+    const body = new URLSearchParams();
+    body.append('ssid', ssid);
+
+    return fetch(`${this.api}network/remove`, { method: 'POST', body }).then(parseFetch);
   }
   signin() {
     return fecth(`${this.api}network/signin`, { method: 'GET' }).then(parseFetch);

@@ -17,25 +17,32 @@ export default class Printer {
     return fetch(`${this.api}printer/listall`, { method: 'GET' }).then(parseFetch);
   }
   heatup() {
-    return fetch(`${this.api}printer/heatup`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({})
-    }).then(parseFetch);
+    const body = new URLSearchParams();
+
+    return fetch(`${this.api}printer/heatup`, { method: 'POST', body }).then(parseFetch);
+  }
+  fetch(id, startCode = 'g28', endCode = 'g28') {
+    const body = new URLSearchParams();
+    body.append('id', id);
+    body.append('start_code', startCode);
+    body.append('end_code', endCode);
+
+    return fetch(`${this.api}printer/fetch`, { method: 'POST', body }).then(parseFetch);
   }
   print(gcode = '', first = false, start = false, last) {
-    return fetch(`${this.api}printer/print`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ gcode, first, start, last })
-    }).then(parseFetch);
+    const body = new URLSearchParams();
+    body.append('gcode', gcode);
+    body.append('first', first);
+    body.append('start', start);
+    body.append('last', last);
+
+    return fetch(`${this.api}printer/print`, { method: 'POST', body }).then(parseFetch);
   }
   stop(gcode = '') {
-    return fetch(`${this.api}printer/stop`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ gcode, first, start, last })
-    }).then(parseFetch);
+    const body = new URLSearchParams();
+    body.append('gcode', gcode);
+
+    return fetch(`${this.api}printer/stop`, { method: 'POST', body }).then(parseFetch);
   }
   async _sendBatch(gcode, start, index) {
     try {

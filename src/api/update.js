@@ -9,26 +9,20 @@ export default class Update {
   }
   download() {
     //not tested
-    return fetch(`${this.api}update/download`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({})
-    }).then(parseFetch);
+    const body = new URLSearchParams();
+
+    return fetch(`${this.api}update/download`, { method: 'POST', body }).then(parseFetch);
   }
   install() {
     //not tested
-    return fetch(`${this.api}update/install`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({})
-    }).then(parseFetch);
+    const body = new URLSearchParams();
+
+    return fetch(`${this.api}update/install`, { method: 'POST', body }).then(parseFetch);
   }
   clear() {
     //not tested
-    return fetch(`${this.api}update/clear`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({})
-    }).then(parseFetch);
+    const body = new URLSearchParams();
+
+    return fetch(`${this.api}update/clear`, { method: 'POST', body }).then(parseFetch);
   }
 }

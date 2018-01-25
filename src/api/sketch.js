@@ -8,20 +8,17 @@ export default class Sketch {
     return fetch(`${this.api}sketch/?id=${id}`, { method: 'GET' }).then(parseFetch);
   }
   set(data = '') {
-    return fetch(`${this.api}sketch`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ data })
-    }).then(parseFetch);
+    const body = new URLSearchParams();
+    body.append('data', data);
+
+    return fetch(`${this.api}sketch`, { method: 'POST', body }).then(parseFetch);
   }
   status() {
     return fetch(`${this.api}sketch/status`, { method: 'GET' }).then(parseFetch);
   }
   clear() {
-    return fetch(`${this.api}sketch/clear`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({})
-    }).then(parseFetch);
+    const body = new URLSearchParams();
+
+    return fetch(`${this.api}sketch/clear`, { method: 'POST', body }).then(parseFetch);
   }
 }

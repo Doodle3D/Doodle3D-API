@@ -11,10 +11,11 @@ export default class Config {
     return fetch(`${this.api}config/all`, { method: 'GET' }).then(parseFetch);
   }
   set(data) {
-    return fetch(`${this.api}config`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    }).then(parseFetch);
+    const body = new URLSearchParams();
+    for (const key in data) {
+      body.append(key, data[key]);
+    }
+
+    return fetch(`${this.api}config`, { method: 'POST', body }).then(parseFetch);
   }
 }
