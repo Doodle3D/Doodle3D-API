@@ -1,4 +1,3 @@
-import Doodle3DBox from './doodle3dbox.js';
 import EventDispatcher from 'eventdispatcher.js';
 import { sleep, parseFetch } from './utils.js';
 
@@ -47,16 +46,15 @@ export default class Doodle3DManager extends EventDispatcher {
 
     if (this.checkNonServerBoxes) boxes = boxes.concat(this.nonServerBoxes);
 
-    const knownIPsClient = this.boxes.map(box => box.boxData.localip);
+    const knownIPsClient = this.boxes.map(box => box.localip);
     const knownIPsServer = boxes.map(box => box.localip);
 
     const newBoxes = boxes.filter(box => knownIPsClient.indexOf(box.localip) === -1);
-    const removedBoxes = this.boxes.filter(box => knownIPsServer.indexOf(box.boxData.localip) === -1);
+    const removedBoxes = this.boxes.filter(box => knownIPsServer.indexOf(box.localip) === -1);
 
     let changed = false;
     for (const boxData of newBoxes) {
-      const box = new Doodle3DBox(boxData);
-      this._addBox(box);
+      this._addBox(boxData);
 
       changed = true;
     }

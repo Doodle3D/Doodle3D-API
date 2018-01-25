@@ -9,12 +9,12 @@ import SystemAPI from './api/system.js';
 import UpdateAPI from './api/update.js';
 
 export default class Doodle3DBox extends EventDispatcher {
-  constructor(boxData) {
+  constructor(localip) {
     super();
 
-    this.boxData = boxData;
+    this.localip = localip;
 
-    this.api = `http://${boxData.localip}/d3dapi/`;
+    this.api = `http://${localip}/d3dapi/`;
 
     this.alive = false;
     this.autoUpdate = false;
