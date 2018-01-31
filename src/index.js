@@ -1,3 +1,4 @@
+import 'url-search-params-polyfill';
 import 'whatwg-fetch';
 
 import Doodle3DManager from './doodle3dmanager.js';
